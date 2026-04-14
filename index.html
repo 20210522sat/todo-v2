@@ -19,34 +19,29 @@
       --border-t:rgba(0,0,0,0.10);--border-s:rgba(0,0,0,0.20);
       --r-md:8px;--r-lg:12px;
     }
-    @media(prefers-color-scheme:dark){
-      :root{
-        --bg-primary:#1e1e1c;--bg-secondary:#2a2a27;--bg-tertiary:#323230;--bg-group:#252523;
-        --text-primary:#f0ede8;--text-secondary:#b4b2a9;--text-tertiary:#888780;
-        --text-danger:#f09595;
-        --border-t:rgba(255,255,255,0.08);--border-s:rgba(255,255,255,0.18);
-      }
-    }
+    @media(prefers-color-scheme:dark){:root{
+      --bg-primary:#1e1e1c;--bg-secondary:#2a2a27;--bg-tertiary:#323230;--bg-group:#252523;
+      --text-primary:#f0ede8;--text-secondary:#b4b2a9;--text-tertiary:#888780;
+      --text-danger:#f09595;
+      --border-t:rgba(255,255,255,0.08);--border-s:rgba(255,255,255,0.18);
+    }}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-tertiary);color:var(--text-primary);min-height:100vh;padding:2rem 1rem}
     .app{max-width:640px;margin:0 auto}
-    /* top */
     .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
     .top-bar h1{font-size:20px;font-weight:500}
+    .sync-dot{width:7px;height:7px;border-radius:50%;background:#ccc;flex-shrink:0;transition:background .3s}
+    .sync-dot.ok{background:#1D9E75}.sync-dot.err{background:#E24B4A}.sync-dot.loading{background:#EF9F27}
     .badge{font-size:12px;padding:3px 10px;border-radius:99px;background:var(--bg-secondary);color:var(--text-secondary)}
-    /* filters */
     .filters{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
     .fb{padding:4px 12px;border:0.5px solid var(--border-t);border-radius:99px;font-size:13px;background:transparent;color:var(--text-secondary);cursor:pointer}
     .fb.on{background:var(--bg-secondary);color:var(--text-primary);border-color:var(--border-s)}
-    /* section */
     .section{margin-bottom:1rem;border:0.5px solid var(--border-t);border-radius:var(--r-lg);overflow:hidden;background:var(--bg-primary)}
     .sec-hd{display:flex;align-items:center;gap:8px;padding:11px 14px;cursor:pointer;user-select:none;background:var(--bg-secondary)}
     .sec-hd:hover{background:var(--bg-tertiary)}
     .sec-title{flex:1;font-size:14px;font-weight:500}
     .sec-count{font-size:12px;color:var(--text-tertiary)}
     .sec-body{border-top:0.5px solid var(--border-t)}
-    /* group */
-    .group{border-top:0.5px solid var(--border-t)}
-    .group:first-child{border-top:none}
+    .group{border-top:0.5px solid var(--border-t)}.group:first-child{border-top:none}
     .grp-hd{display:flex;align-items:center;gap:8px;padding:8px 14px;cursor:pointer;user-select:none;background:var(--bg-group)}
     .grp-hd:hover{background:var(--bg-secondary)}
     .grp-title{flex:1;font-size:13px;font-weight:500;color:var(--text-secondary)}
@@ -54,27 +49,27 @@
     .grp-del{width:20px;height:20px;border:none;background:transparent;cursor:pointer;color:var(--text-tertiary);display:flex;align-items:center;justify-content:center;border-radius:4px}
     .grp-del:hover{color:var(--text-danger);background:rgba(163,45,45,0.08)}
     .grp-body{background:var(--bg-primary)}
-    /* add-task row */
+    /* add row */
     .add-row{display:flex;gap:6px;padding:7px 10px;border-top:0.5px solid var(--border-t);flex-wrap:wrap;background:var(--bg-primary)}
     .add-row input[type=text]{flex:1;min-width:80px;font-size:13px;padding:5px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);outline:none}
     .add-row input[type=date]{font-size:13px;padding:5px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-secondary);outline:none;cursor:pointer}
-    .add-row button,.btn-ghost{font-size:13px;padding:5px 10px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:transparent;color:var(--text-primary);cursor:pointer;white-space:nowrap}
-    .add-row button:hover,.btn-ghost:hover{background:var(--bg-secondary)}
-    /* assignee picker */
+    .add-row button{font-size:13px;padding:5px 10px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:transparent;color:var(--text-primary);cursor:pointer;white-space:nowrap}
+    .add-row button:hover{background:var(--bg-secondary)}
+    /* who picker */
     .who-wrap{position:relative;display:inline-block}
     .who-btn{font-size:12px;padding:4px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis}
     .who-btn:hover{background:var(--bg-secondary)}
-    .who-dropdown{position:absolute;top:calc(100% + 4px);left:0;z-index:100;background:var(--bg-primary);border:0.5px solid var(--border-s);border-radius:var(--r-md);padding:4px;min-width:130px;box-shadow:0 4px 12px rgba(0,0,0,0.10)}
+    .who-dropdown{position:absolute;top:calc(100% + 4px);left:0;z-index:200;background:var(--bg-primary);border:0.5px solid var(--border-s);border-radius:var(--r-md);padding:4px;min-width:130px;box-shadow:0 4px 12px rgba(0,0,0,0.12)}
     .who-option{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--text-primary)}
     .who-option:hover{background:var(--bg-secondary)}
-    .who-check{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--border-s);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+    .who-check{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--border-s);flex-shrink:0}
     .who-check.on{background:#1D9E75;border-color:#1D9E75}
-    .who-check.on::after{content:'';display:block;width:8px;height:8px;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 10 10' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='1.5,5 4,7.5 8.5,2'/%3E%3C/svg%3E") center/contain no-repeat}
+    .who-check.on::after{content:'';display:block;width:100%;height:100%;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 10 10' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='1.5,5 4,7.5 8.5,2'/%3E%3C/svg%3E") center/contain no-repeat}
     .who-sep{height:0.5px;background:var(--border-t);margin:4px 0}
     .who-add-row{display:flex;gap:4px;padding:4px 4px 2px}
     .who-add-row input{flex:1;font-size:12px;padding:4px 6px;border:0.5px solid var(--border-s);border-radius:6px;background:var(--bg-primary);color:var(--text-primary);outline:none}
     .who-add-row button{font-size:12px;padding:4px 7px;border:0.5px solid var(--border-s);border-radius:6px;background:transparent;color:var(--text-primary);cursor:pointer}
-    /* add-group */
+    /* add group */
     .add-grp-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border:none;background:transparent;color:var(--text-tertiary);font-size:12px;cursor:pointer;border-top:0.5px dashed var(--border-t);width:100%;text-align:left}
     .add-grp-btn:hover{color:var(--text-secondary);background:var(--bg-group)}
     .add-grp-row{display:flex;gap:6px;padding:6px 10px;border-top:0.5px dashed var(--border-t);background:var(--bg-group)}
@@ -82,23 +77,41 @@
     .add-grp-row button{font-size:12px;padding:4px 9px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:transparent;color:var(--text-secondary);cursor:pointer;white-space:nowrap}
     .add-grp-row button:hover{background:var(--bg-secondary)}
     /* task item */
-    .todo-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:0.5px solid var(--border-t)}
+    .todo-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:0.5px solid var(--border-t);position:relative}
     .todo-item.done{opacity:0.45}
+    .todo-item:hover .edit-btn{opacity:1}
     .chk{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border-s);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
     .chk.yes{background:#1D9E75;border-color:#1D9E75}
     .chk svg{width:10px;height:10px;stroke:white;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
     .task-body{flex:1;min-width:0}
     .task-text{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .todo-item.done .task-text{text-decoration:line-through;color:var(--text-tertiary)}
-    /* meta row: compact chips */
     .task-meta{display:flex;align-items:center;gap:4px;margin-top:3px;flex-wrap:wrap}
     .chip{font-size:11px;padding:1px 6px;border-radius:99px;font-weight:500;line-height:1.5;white-space:nowrap}
     .chip.due-ok{color:var(--text-tertiary)}
     .chip.due-soon{color:#854F0B;background:#FAEEDA}
     .chip.due-over{color:#791F1F;background:#FCEBEB}
     .meta-dot{font-size:10px;color:var(--text-tertiary);line-height:1}
+    /* edit btn (pencil) */
+    .edit-btn{width:26px;height:26px;border:none;background:transparent;cursor:pointer;color:var(--text-tertiary);display:flex;align-items:center;justify-content:center;border-radius:var(--r-md);flex-shrink:0;opacity:0;transition:opacity .15s}
+    .edit-btn:hover{background:var(--bg-secondary);color:var(--text-secondary)}
     .trash-btn{width:26px;height:26px;border:none;background:transparent;cursor:pointer;color:var(--text-tertiary);display:flex;align-items:center;justify-content:center;border-radius:var(--r-md);flex-shrink:0}
     .trash-btn:hover{background:rgba(163,45,45,0.08);color:var(--text-danger)}
+    /* inline edit mode */
+    .todo-item.editing .task-text{display:none}
+    .todo-item.editing .task-meta{display:none}
+    .todo-item.editing .edit-btn{display:none}
+    .todo-item.editing .trash-btn{display:none}
+    .edit-form{display:none;flex:1;flex-direction:column;gap:6px;min-width:0}
+    .todo-item.editing .edit-form{display:flex}
+    .edit-form-top{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+    .edit-form input[type=text]{flex:1;min-width:80px;font-size:13px;padding:5px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);outline:none;box-shadow:0 0 0 2px rgba(29,158,117,.25)}
+    .edit-form input[type=date]{font-size:13px;padding:5px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-secondary);outline:none;cursor:pointer}
+    .edit-form-actions{display:flex;gap:6px;align-items:center}
+    .edit-form-actions button{font-size:12px;padding:4px 10px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:transparent;color:var(--text-primary);cursor:pointer;white-space:nowrap}
+    .edit-form-actions button.save{background:#1D9E75;border-color:#1D9E75;color:white}
+    .edit-form-actions button.save:hover{background:#0F6E56}
+    .edit-form-actions button:not(.save):hover{background:var(--bg-secondary)}
     /* chevron */
     .cv{width:13px;height:13px;flex-shrink:0;transition:transform .2s;color:var(--text-tertiary)}
     .cv.open{transform:rotate(90deg)}
@@ -122,13 +135,19 @@
     .perm-del{width:22px;height:22px;border:none;background:transparent;cursor:pointer;color:var(--text-tertiary);display:flex;align-items:center;justify-content:center;border-radius:var(--r-md)}
     .perm-del:hover{color:var(--text-danger)}
     .empty-hint{padding:12px;font-size:13px;color:var(--text-tertiary);text-align:center}
+    .loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1rem;gap:12px;color:var(--text-tertiary);font-size:14px}
+    .spinner{width:24px;height:24px;border:2px solid var(--border-t);border-top-color:#1D9E75;border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
   </style>
 </head>
 <body>
 <div class="app">
   <div class="top-bar">
     <h1>共享代辦清單</h1>
-    <span class="badge" id="top-badge">0 / 0 完成</span>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="sync-dot loading" id="sync-dot" title="同步中"></span>
+      <span class="badge" id="top-badge">—</span>
+    </div>
   </div>
   <div class="filters">
     <button class="fb on" onclick="setFilter('all',this)">全部</button>
@@ -136,154 +155,145 @@
     <button class="fb" onclick="setFilter('done',this)">已完成</button>
     <button class="fb" onclick="setFilter('overdue',this)">已逾期</button>
   </div>
-  <div id="sections-wrap"></div>
-  <div>
-    <button class="sec-add-btn" onclick="showNewSec()">＋ 新增分類</button>
-  </div>
-  <div id="new-sec-form" style="display:none" class="new-sec-row">
-    <input type="text" id="new-sec-input" placeholder="分類名稱..." maxlength="30" />
-    <button onclick="confirmNewSec()">確認</button>
-    <button onclick="cancelNewSec()">取消</button>
-  </div>
-  <div class="bin-section">
-    <div class="bin-hd" onclick="toggleBin()">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text-tertiary);flex-shrink:0">
-        <polyline points="2,4 12,4"/><path d="M5,4V2.5h4V4"/><path d="M3,4l.7,8h6.6L11,4"/>
-        <line x1="5.5" y1="6.5" x2="5.5" y2="10"/><line x1="8.5" y1="6.5" x2="8.5" y2="10"/>
-      </svg>
-      <span class="bin-title">垃圾桶 <span id="bin-count">(0)</span></span>
-      <span style="font-size:11px;color:var(--text-tertiary)">7 天後自動清除</span>
-      <svg id="bin-cv" width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text-tertiary);transition:transform .2s">
-        <polyline points="5,3 9,7 5,11"/>
-      </svg>
-    </div>
-    <div id="bin-body" style="display:none"></div>
+  <div id="main-wrap">
+    <div class="loading-screen"><div class="spinner"></div>連線中…</div>
   </div>
 </div>
 
-<script>
-// ── People ──────────────────────────────────────────────────────────────────
-let people = ['欣儀','咨妗','所有人'];
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBCHC-YeuEnAn-AHmxyqilk-YfZJoYlZr4",
+  authDomain: "todoo-4dabb.firebaseapp.com",
+  databaseURL: "https://todoo-4dabb-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "todoo-4dabb",
+  storageBucket: "todoo-4dabb.firebasestorage.app",
+  messagingSenderId: "1051175196313",
+  appId: "1:1051175196313:web:d2ad472040862f23510a08"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
+const ROOT = ref(db, 'todoapp');
+
 const PCOLORS = [
-  {bg:'#E6F1FB',col:'#0C447C'}, // 欣儀
-  {bg:'#E1F5EE',col:'#085041'}, // 咨妗
-  {bg:'#FBEAF0',col:'#72243E'}, // 新增者預設
-  {bg:'#F1EFE8',col:'#444441'}, // 所有人
-  {bg:'#EEEDFE',col:'#3C3489'},
-  {bg:'#FAEEDA',col:'#633806'},
+  {bg:'#E6F1FB',col:'#0C447C'},{bg:'#E1F5EE',col:'#085041'},
+  {bg:'#FBEAF0',col:'#72243E'},{bg:'#F1EFE8',col:'#444441'},
+  {bg:'#EEEDFE',col:'#3C3489'},{bg:'#FAEEDA',col:'#633806'},
 ];
-function personColor(name) {
-  const idx = people.indexOf(name);
-  return PCOLORS[idx % PCOLORS.length] || PCOLORS[2];
-}
+function personColor(name,ppl){const i=ppl.indexOf(name);return PCOLORS[i>=0?i%PCOLORS.length:2];}
 
-// ── State ────────────────────────────────────────────────────────────────────
-let nid = 20;
-const today = () => new Date().toISOString().slice(0,10);
-const addDays = (d,n) => { const dt=new Date(d); dt.setDate(dt.getDate()+n); return dt.toISOString().slice(0,10); };
-const STORAGE_KEY = 'shared-todo-v3';
+let state=null, filter='all', binOpen=false, pickerSel={}, openPicker=null;
+let editingId=null; // currently editing task id
+let editPickerSel=new Set();
 
-let sections = [
-  { id:1, title:'工作任務', open:true, groups:[
-    { id:2, title:'本週重點', open:true, tasks:[
-      { id:3, text:'準備週會簡報', assignees:['欣儀'], done:false, due:addDays(today(),1) },
-      { id:4, text:'更新專案文件', assignees:['咨妗'], done:false, due:addDays(today(),5) },
+const today=()=>new Date().toISOString().slice(0,10);
+const addDays=(d,n)=>{const dt=new Date(d);dt.setDate(dt.getDate()+n);return dt.toISOString().slice(0,10);};
+
+function defaultState(){
+  return{nid:20,people:['欣儀','咨妗','所有人'],sections:[
+    {id:1,title:'工作任務',open:true,groups:[
+      {id:2,title:'本週重點',open:true,tasks:[
+        {id:3,text:'準備週會簡報',assignees:['欣儀'],done:false,due:addDays(today(),1)},
+        {id:4,text:'更新專案文件',assignees:['咨妗'],done:false,due:addDays(today(),5)},
+      ]},
+      {id:5,title:'長期追蹤',open:true,tasks:[
+        {id:6,text:'回覆客戶信件',assignees:['欣儀','咨妗'],done:true,due:addDays(today(),-1)},
+      ]},
+    ],tasks:[]},
+    {id:7,title:'生活雜事',open:true,groups:[],tasks:[
+      {id:8,text:'安排下次團隊聚餐',assignees:['所有人'],done:false,due:addDays(today(),10)},
+      {id:9,text:'購買辦公室零食',assignees:['咨妗'],done:false,due:addDays(today(),3)},
     ]},
-    { id:5, title:'長期追蹤', open:true, tasks:[
-      { id:6, text:'回覆客戶信件', assignees:['欣儀','咨妗'], done:true, due:addDays(today(),-1) },
-    ]},
-  ], tasks:[] },
-  { id:7, title:'生活雜事', open:true, groups:[], tasks:[
-    { id:8, text:'安排下次團隊聚餐', assignees:['所有人'], done:false, due:addDays(today(),10) },
-    { id:9, text:'購買辦公室零食',   assignees:['咨妗'],   done:false, due:addDays(today(),3) },
-  ]},
-];
-let bin = [];
-let filter = 'all';
-let binOpen = false;
-// who-picker state per add-row key
-let pickerSel = {}; // key -> Set of names
-let openPicker = null; // currently open picker key
-
-function saveState() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({sections,bin,nid,people})); } catch(e){}
-}
-function loadState() {
-  try {
-    const r = localStorage.getItem(STORAGE_KEY);
-    if (r) { const s=JSON.parse(r); sections=s.sections; bin=s.bin; nid=s.nid; if(s.people)people=s.people; }
-  } catch(e){}
+  ],bin:[]};
 }
 
-// ── Due label ────────────────────────────────────────────────────────────────
-function dueLabel(due, done) {
-  if (!due) return null;
-  const now=new Date(); now.setHours(0,0,0,0);
-  const d=new Date(due); d.setHours(0,0,0,0);
-  const diff=Math.round((d-now)/86400000);
-  if (done) return { text: fmtDate(due), cls:'chip due-ok' };
-  if (diff<0) return { text:'逾期 '+Math.abs(diff)+'天', cls:'chip due-over' };
-  if (diff===0) return { text:'今天', cls:'chip due-soon' };
-  if (diff<=3) return { text:diff+'天後', cls:'chip due-soon' };
-  return { text: fmtDate(due), cls:'chip due-ok' };
-}
-function fmtDate(d) { if(!d)return''; const p=d.split('-'); return p[1]+'/'+p[2]; }
+function setSyncDot(s){const d=document.getElementById('sync-dot');if(d){d.className='sync-dot '+s;d.title={ok:'已同步',loading:'同步中…',err:'連線失敗'}[s]||'';}}
+function pushState(){setSyncDot('loading');purgeBin();set(ROOT,state).then(()=>setSyncDot('ok')).catch(()=>setSyncDot('err'));}
 
-function isVisible(t) {
-  if (filter==='active') return !t.done;
-  if (filter==='done')   return t.done;
-  if (filter==='overdue') {
-    if (t.done||!t.due) return false;
-    const now=new Date(); now.setHours(0,0,0,0);
-    return new Date(t.due)<now;
+onValue(ROOT,snap=>{
+  const val=snap.val();
+  if(!val){state=defaultState();pushState();}
+  else{
+    state=val;
+    state.bin=state.bin||[];
+    state.people=state.people||['欣儀','咨妗','所有人'];
+    state.sections=(state.sections||[]).map(s=>({...s,tasks:s.tasks||[],groups:(s.groups||[]).map(g=>({...g,tasks:g.tasks||[]}))}));
   }
-  return true;
-}
-function allTasks(sec) { return [...sec.tasks, ...sec.groups.flatMap(g=>g.tasks)]; }
-function getTaskList(sid,gid) {
-  const s=sections.find(s=>s.id===sid); if(!s)return null;
-  if(gid!=null){ const g=s.groups.find(g=>g.id===gid); return g?g.tasks:null; }
+  setSyncDot('ok');render();
+},err=>{setSyncDot('err');console.error(err);});
+
+function allTasks(sec){return[...(sec.tasks||[]),...(sec.groups||[]).flatMap(g=>g.tasks||[])];}
+function getTaskList(sid,gid){
+  const s=state.sections.find(s=>s.id===sid);if(!s)return null;
+  if(gid!=null){const g=(s.groups||[]).find(g=>g.id===gid);return g?g.tasks:null;}
   return s.tasks;
 }
+function dueLabel(due,done){
+  if(!due)return null;
+  const now=new Date();now.setHours(0,0,0,0);
+  const d=new Date(due);d.setHours(0,0,0,0);
+  const diff=Math.round((d-now)/86400000);
+  if(done)return{text:fmtDate(due),cls:'chip due-ok'};
+  if(diff<0)return{text:'逾期 '+Math.abs(diff)+'天',cls:'chip due-over'};
+  if(diff===0)return{text:'今天',cls:'chip due-soon'};
+  if(diff<=3)return{text:diff+'天後',cls:'chip due-soon'};
+  return{text:fmtDate(due),cls:'chip due-ok'};
+}
+function fmtDate(d){if(!d)return'';const p=d.split('-');return p[1]+'/'+p[2];}
+function isVisible(t){
+  if(filter==='active')return!t.done;
+  if(filter==='done')return t.done;
+  if(filter==='overdue'){if(t.done||!t.due)return false;const now=new Date();now.setHours(0,0,0,0);return new Date(t.due)<now;}
+  return true;
+}
+function purgeBin(){if(!state)return;state.bin=(state.bin||[]).filter(b=>new Date(b.deletedAt).getTime()+7*86400000>Date.now());}
 
 // ── Render ────────────────────────────────────────────────────────────────────
-function render() {
-  purgeBin();
-  const total=sections.flatMap(s=>allTasks(s)).length;
-  const done =sections.flatMap(s=>allTasks(s)).filter(t=>t.done).length;
-  document.getElementById('top-badge').textContent = done+' / '+total+' 完成';
-  document.getElementById('sections-wrap').innerHTML = sections.map(renderSection).join('');
-  renderBin();
-  saveState();
+function render(){
+  if(!state)return;
+  const total=state.sections.flatMap(s=>allTasks(s)).length;
+  const done=state.sections.flatMap(s=>allTasks(s)).filter(t=>t.done).length;
+  document.getElementById('top-badge').textContent=done+' / '+total+' 完成';
+  document.getElementById('main-wrap').innerHTML=
+    state.sections.map(renderSection).join('')
+    +`<div><button class="sec-add-btn" onclick="showNewSec()">＋ 新增分類</button></div>
+       <div id="new-sec-form" style="display:none" class="new-sec-row">
+         <input type="text" id="new-sec-input" placeholder="分類名稱..." maxlength="30"/>
+         <button onclick="confirmNewSec()">確認</button>
+         <button onclick="cancelNewSec()">取消</button>
+       </div>`
+    +renderBinSection();
 }
 
-function renderSection(sec) {
-  const all=allTasks(sec), secDone=all.filter(t=>t.done).length;
-  if (!sec.open) return `<div class="section"><div class="sec-hd" onclick="toggleSec(${sec.id})">
+function renderSection(sec){
+  const all=allTasks(sec),secDone=all.filter(t=>t.done).length;
+  if(!sec.open)return`<div class="section"><div class="sec-hd" onclick="toggleSec(${sec.id})">
     <svg class="cv" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>
     <span class="sec-title">${sec.title}</span><span class="sec-count">${secDone}/${all.length}</span>
   </div></div>`;
-  return `<div class="section" id="sec-${sec.id}">
+  return`<div class="section" id="sec-${sec.id}">
     <div class="sec-hd" onclick="toggleSec(${sec.id})">
       <svg class="cv open" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>
       <span class="sec-title">${sec.title}</span><span class="sec-count">${secDone}/${all.length}</span>
     </div>
     <div class="sec-body">
-      ${sec.groups.map(g=>renderGroup(g,sec.id)).join('')}
-      <div>${sec.tasks.filter(isVisible).map(t=>renderTask(t,sec.id,null)).join('')}</div>
+      ${(sec.groups||[]).map(g=>renderGroup(g,sec.id)).join('')}
+      <div>${(sec.tasks||[]).filter(isVisible).map(t=>renderTask(t,sec.id,null)).join('')}</div>
       ${renderAddGrpBtn(sec.id)}
       ${renderAddRow(sec.id,null)}
     </div>
   </div>`;
 }
 
-function renderGroup(g,sid) {
-  const visible=g.tasks.filter(isVisible), gdone=g.tasks.filter(t=>t.done).length;
-  return `<div class="group" id="grp-${g.id}">
+function renderGroup(g,sid){
+  const visible=(g.tasks||[]).filter(isVisible),gdone=(g.tasks||[]).filter(t=>t.done).length;
+  return`<div class="group" id="grp-${g.id}">
     <div class="grp-hd" onclick="toggleGroup(${sid},${g.id})">
       <svg class="cv${g.open?' open':''}" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>
       <span class="grp-title">${g.title}</span>
-      <span class="grp-count">${gdone}/${g.tasks.length}</span>
+      <span class="grp-count">${gdone}/${(g.tasks||[]).length}</span>
       <button class="grp-del" onclick="event.stopPropagation();trashGroup(${sid},${g.id})" title="刪除子標題">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
       </button>
@@ -295,15 +305,15 @@ function renderGroup(g,sid) {
   </div>`;
 }
 
-function renderAddGrpBtn(sid) {
-  return `<div id="agb-${sid}">
+function renderAddGrpBtn(sid){
+  return`<div id="agb-${sid}">
     <button class="add-grp-btn" onclick="showAddGrp(${sid})">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>新增子標題
     </button>
     <div id="agf-${sid}" style="display:none">
       <div class="add-grp-row">
         <input type="text" id="agi-${sid}" placeholder="子標題名稱..." maxlength="30"
-          onkeydown="if(event.key==='Enter')confirmAddGrp(${sid});if(event.key==='Escape')hideAddGrp(${sid})" />
+          onkeydown="if(event.key==='Enter')confirmAddGrp(${sid});if(event.key==='Escape')hideAddGrp(${sid})"/>
         <button onclick="confirmAddGrp(${sid})">確認</button>
         <button onclick="hideAddGrp(${sid})">取消</button>
       </div>
@@ -311,28 +321,26 @@ function renderAddGrpBtn(sid) {
   </div>`;
 }
 
-function renderAddRow(sid,gid) {
-  const key = gid!=null?`${sid}_${gid}`:`${sid}_ug`;
-  if (!pickerSel[key]) pickerSel[key] = new Set();
-  const sel = pickerSel[key];
-  const label = sel.size===0 ? '負責人' : [...sel].join('、');
-  return `<div class="add-row" id="row-${key}">
+function renderAddRow(sid,gid){
+  const key=gid!=null?`${sid}_${gid}`:`${sid}_ug`;
+  if(!pickerSel[key])pickerSel[key]=new Set();
+  const sel=pickerSel[key];
+  const label=sel.size===0?'負責人':[...sel].join('、');
+  const ppl=state.people||[];
+  return`<div class="add-row" id="row-${key}">
     <input type="text" id="inp-${key}" placeholder="新增任務..." maxlength="60"
-      onkeydown="if(event.key==='Enter')addTask(${sid},${gid})" />
-    <input type="date" id="date-${key}" min="${today()}" />
+      onkeydown="if(event.key==='Enter')addTask(${sid},${gid})"/>
+    <input type="date" id="date-${key}" min="${today()}"/>
     <div class="who-wrap">
       <button class="who-btn" id="wbtn-${key}" onclick="togglePicker('${key}',event)">${label}</button>
       <div class="who-dropdown" id="wdrop-${key}" style="display:none">
-        ${people.map(p=>{
-          const on=sel.has(p);
-          return `<div class="who-option" onclick="togglePerson('${key}','${p}')">
-            <span class="who-check${on?' on':''}"></span>${p}
-          </div>`;
-        }).join('')}
+        ${ppl.map(p=>`<div class="who-option" onclick="togglePerson('${key}','${p}')">
+          <span class="who-check${sel.has(p)?' on':''}"></span>${p}
+        </div>`).join('')}
         <div class="who-sep"></div>
         <div class="who-add-row">
           <input type="text" id="newp-${key}" placeholder="新增成員..." maxlength="8"
-            onkeydown="if(event.key==='Enter')addPerson('${key}')" onclick="event.stopPropagation()" />
+            onkeydown="if(event.key==='Enter')addPerson('${key}')" onclick="event.stopPropagation()"/>
           <button onclick="addPerson('${key}');event.stopPropagation()">＋</button>
         </div>
       </div>
@@ -341,41 +349,78 @@ function renderAddRow(sid,gid) {
   </div>`;
 }
 
-function renderTask(t,sid,gid) {
-  const dl = dueLabel(t.due,t.done);
-  const ga = gid!=null?gid:'null';
-  const assignees = (t.assignees||[t.assignee]).filter(Boolean);
-  const chips = assignees.map(a=>{
-    const c=personColor(a);
-    return `<span class="chip" style="background:${c.bg};color:${c.col}">${a}</span>`;
-  }).join('');
-  const dueChip = dl?`<span class="meta-dot">·</span><span class="${dl.cls}">${dl.text}</span>`:'';
-  return `<div class="todo-item${t.done?' done':''}">
+function renderTask(t,sid,gid){
+  const dl=dueLabel(t.due,t.done);
+  const ga=gid!=null?gid:'null';
+  const ppl=state.people||[];
+  const assignees=(t.assignees||[t.assignee]).filter(Boolean);
+  const chips=assignees.map(a=>{const c=personColor(a,ppl);return`<span class="chip" style="background:${c.bg};color:${c.col}">${a}</span>`;}).join('');
+  const dueChip=dl?`<span class="meta-dot">·</span><span class="${dl.cls}">${dl.text}</span>`:'';
+  const isEditing=editingId===t.id;
+
+  // build edit-form who picker
+  const editKey=`edit_${t.id}`;
+  if(isEditing && editPickerSel.size===0 && assignees.length){
+    // seed with current assignees
+  }
+  const editLabel=isEditing?(editPickerSel.size>0?[...editPickerSel].join('、'):assignees.join('、')):'';
+  const editWho=isEditing?`
+    <div class="who-wrap">
+      <button class="who-btn" id="wbtn-${editKey}" onclick="togglePicker('${editKey}',event)">${editLabel||'負責人'}</button>
+      <div class="who-dropdown" id="wdrop-${editKey}" style="display:none">
+        ${ppl.map(p=>`<div class="who-option" onclick="togglePerson('${editKey}','${p}')">
+          <span class="who-check${editPickerSel.has(p)?' on':''}"></span>${p}
+        </div>`).join('')}
+        <div class="who-sep"></div>
+        <div class="who-add-row">
+          <input type="text" id="newp-${editKey}" placeholder="新增成員..." maxlength="8"
+            onkeydown="if(event.key==='Enter')addPerson('${editKey}')" onclick="event.stopPropagation()"/>
+          <button onclick="addPerson('${editKey}');event.stopPropagation()">＋</button>
+        </div>
+      </div>
+    </div>`:'';
+
+  return`<div class="todo-item${t.done?' done':''}${isEditing?' editing':''}" id="ti-${t.id}">
     <button class="chk${t.done?' yes':''}" onclick="toggleTask(${sid},${ga},${t.id})">
       ${t.done?`<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>`:''}
     </button>
     <div class="task-body">
       <div class="task-text">${t.text}</div>
       <div class="task-meta">${chips}${dueChip}</div>
+      <div class="edit-form">
+        <div class="edit-form-top">
+          <input type="text" id="etxt-${t.id}" value="${t.text.replace(/"/g,'&quot;')}" maxlength="60"
+            onkeydown="if(event.key==='Enter')saveEdit(${sid},${ga},${t.id});if(event.key==='Escape')cancelEdit()"/>
+          <input type="date" id="edate-${t.id}" value="${t.due||''}" min="${today()}"/>
+          ${editWho}
+        </div>
+        <div class="edit-form-actions">
+          <button class="save" onclick="saveEdit(${sid},${ga},${t.id})">儲存</button>
+          <button onclick="cancelEdit()">取消</button>
+        </div>
+      </div>
     </div>
-    <button class="trash-btn" onclick="trashTask(${sid},${ga},${t.id})" title="移至垃圾桶">
-      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-        <polyline points="2,4 12,4"/><path d="M5,4V2.5h4V4"/><path d="M3,4l.7,8h6.6L11,4"/>
-      </svg>
-    </button>
+    ${isEditing?'':
+      `<button class="edit-btn" onclick="startEdit(${t.id},'${assignees.join(',')}')" title="編輯">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9.5 2.5l2 2L4 12H2v-2L9.5 2.5z"/>
+        </svg>
+      </button>
+      <button class="trash-btn" onclick="trashTask(${sid},${ga},${t.id})" title="移至垃圾桶">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <polyline points="2,4 12,4"/><path d="M5,4V2.5h4V4"/><path d="M3,4l.7,8h6.6L11,4"/>
+        </svg>
+      </button>`
+    }
   </div>`;
 }
 
-function renderBin() {
-  document.getElementById('bin-count').textContent='('+bin.length+')';
-  if (!binOpen) { document.getElementById('bin-body').style.display='none'; return; }
-  document.getElementById('bin-body').style.display='block';
-  const body=document.getElementById('bin-body');
-  if (!bin.length) { body.innerHTML='<div class="empty-hint">垃圾桶是空的</div>'; return; }
-  body.innerHTML=bin.map(b=>{
+function renderBinSection(){
+  const bin=state.bin||[];
+  const body=binOpen?(bin.length?bin.map(b=>{
     const left=Math.ceil((new Date(b.deletedAt).getTime()+7*86400000-Date.now())/86400000);
     const where=b.groupTitle?b.secTitle+' › '+b.groupTitle:b.secTitle;
-    return `<div class="bin-item">
+    return`<div class="bin-item">
       <div style="flex:1;min-width:0">
         <div class="bin-text">${b.isGroup?'[子標題] ':''}${b.label}</div>
         <div style="font-size:11px;color:var(--text-tertiary);margin-top:2px">${where}${b.due?' · '+fmtDate(b.due):''}</div>
@@ -386,72 +431,62 @@ function renderBin() {
         <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
       </button>
     </div>`;
-  }).join('');
+  }).join(''):'<div class="empty-hint">垃圾桶是空的</div>'):'';
+  return`<div class="bin-section">
+    <div class="bin-hd" onclick="toggleBin()">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text-tertiary);flex-shrink:0">
+        <polyline points="2,4 12,4"/><path d="M5,4V2.5h4V4"/><path d="M3,4l.7,8h6.6L11,4"/>
+        <line x1="5.5" y1="6.5" x2="5.5" y2="10"/><line x1="8.5" y1="6.5" x2="8.5" y2="10"/>
+      </svg>
+      <span class="bin-title">垃圾桶 <span>(${bin.length})</span></span>
+      <span style="font-size:11px;color:var(--text-tertiary)">7 天後自動清除</span>
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text-tertiary);transition:transform .2s;transform:${binOpen?'rotate(90deg)':''}">
+        <polyline points="5,3 9,7 5,11"/>
+      </svg>
+    </div>
+    ${binOpen?`<div>${body}</div>`:''}
+  </div>`;
 }
 
-function purgeBin() { bin=bin.filter(b=>new Date(b.deletedAt).getTime()+7*86400000>Date.now()); }
+// ── Edit actions ─────────────────────────────────────────────────────────────
+window.startEdit=(tid,assigneesStr)=>{
+  editingId=tid;
+  const current=assigneesStr?assigneesStr.split(',').filter(Boolean):[];
+  editPickerSel=new Set(current);
+  render();
+  // focus text input after render
+  setTimeout(()=>{
+    const inp=document.getElementById('etxt-'+tid);
+    if(inp){inp.focus();inp.select();}
+  },0);
+};
 
-// ── Picker ────────────────────────────────────────────────────────────────────
-function togglePicker(key,e) {
-  e.stopPropagation();
-  const drop=document.getElementById('wdrop-'+key);
-  if (!drop) return;
-  const isOpen=drop.style.display!=='none';
-  if (openPicker && openPicker!==key) {
-    const old=document.getElementById('wdrop-'+openPicker);
-    if(old)old.style.display='none';
+window.cancelEdit=()=>{editingId=null;editPickerSel=new Set();render();};
+
+window.saveEdit=(sid,gid,tid)=>{
+  const newText=document.getElementById('etxt-'+tid)?.value.trim();
+  if(!newText)return;
+  const newDue=document.getElementById('edate-'+tid)?.value||'';
+  const editKey=`edit_${tid}`;
+  const newAssignees=editPickerSel.size>0?[...editPickerSel]:null;
+  const list=getTaskList(sid,gid);
+  const t=list?.find(t=>t.id===tid);
+  if(t){
+    t.text=newText;
+    t.due=newDue;
+    if(newAssignees)t.assignees=newAssignees;
   }
-  drop.style.display=isOpen?'none':'block';
-  openPicker=isOpen?null:key;
-}
-function togglePerson(key,name) {
-  if (!pickerSel[key]) pickerSel[key]=new Set();
-  const sel=pickerSel[key];
-  if (sel.has(name)) sel.delete(name); else sel.add(name);
-  // update button label
-  const btn=document.getElementById('wbtn-'+key);
-  if(btn) btn.textContent=sel.size===0?'負責人':[...sel].join('、');
-  // update checkmarks
-  const drop=document.getElementById('wdrop-'+key);
-  if(drop) drop.querySelectorAll('.who-option').forEach(el=>{
-    const n=el.textContent.trim();
-    const chk=el.querySelector('.who-check');
-    if(chk) chk.className='who-check'+(sel.has(n)?' on':'');
-  });
-}
-function addPerson(key) {
-  const inp=document.getElementById('newp-'+key);
-  const name=inp?.value.trim();
-  if(!name||people.includes(name))return;
-  people.push(name);
-  inp.value='';
-  // add option to this picker without full re-render
-  const drop=document.getElementById('wdrop-'+key);
-  if(drop){
-    const sep=drop.querySelector('.who-sep');
-    const opt=document.createElement('div');
-    opt.className='who-option';
-    opt.innerHTML=`<span class="who-check"></span>${name}`;
-    opt.onclick=()=>togglePerson(key,name);
-    drop.insertBefore(opt,sep);
-  }
-  saveState();
-}
-document.addEventListener('click',()=>{
-  if(openPicker){
-    const d=document.getElementById('wdrop-'+openPicker);
-    if(d)d.style.display='none';
-    openPicker=null;
-  }
-});
+  editingId=null;editPickerSel=new Set();
+  pushState();
+};
 
 // ── Actions ───────────────────────────────────────────────────────────────────
-function toggleSec(id){const s=sections.find(s=>s.id===id);if(s)s.open=!s.open;render();}
-function toggleGroup(sid,gid){const s=sections.find(s=>s.id===sid);const g=s?.groups.find(g=>g.id===gid);if(g)g.open=!g.open;render();}
-function toggleBin(){binOpen=!binOpen;const ch=document.getElementById('bin-cv');if(ch)ch.style.transform=binOpen?'rotate(90deg)':'';renderBin();}
-function toggleTask(sid,gid,tid){const list=getTaskList(sid,gid);const t=list?.find(t=>t.id===tid);if(t)t.done=!t.done;render();}
+window.toggleSec=id=>{const s=state.sections.find(s=>s.id===id);if(s)s.open=!s.open;pushState();};
+window.toggleGroup=(sid,gid)=>{const s=state.sections.find(s=>s.id===sid);const g=(s?.groups||[]).find(g=>g.id===gid);if(g)g.open=!g.open;pushState();};
+window.toggleBin=()=>{binOpen=!binOpen;render();};
+window.toggleTask=(sid,gid,tid)=>{const list=getTaskList(sid,gid);const t=list?.find(t=>t.id===tid);if(t)t.done=!t.done;pushState();};
 
-function addTask(sid,gid){
+window.addTask=(sid,gid)=>{
   const key=gid!=null?`${sid}_${gid}`:`${sid}_ug`;
   const text=document.getElementById('inp-'+key)?.value.trim();
   if(!text)return;
@@ -459,68 +494,97 @@ function addTask(sid,gid){
   const sel=pickerSel[key]||new Set();
   const assignees=sel.size>0?[...sel]:['所有人'];
   const list=getTaskList(sid,gid);
-  if(list)list.push({id:nid++,text,assignees,done:false,due});
+  if(list)list.push({id:state.nid++,text,assignees,done:false,due});
   pickerSel[key]=new Set();
-  render();
-}
+  pushState();
+};
 
-function trashTask(sid,gid,tid){
-  const s=sections.find(s=>s.id===sid);if(!s)return;
+window.trashTask=(sid,gid,tid)=>{
+  const s=state.sections.find(s=>s.id===sid);if(!s)return;
   const list=getTaskList(sid,gid);
   const idx=list?.findIndex(t=>t.id===tid);
   if(idx==null||idx<0)return;
   const[task]=list.splice(idx,1);
-  const g=gid!=null?s.groups.find(g=>g.id===gid):null;
-  bin.push({id:nid++,isGroup:false,label:task.text,due:task.due,
+  const g=gid!=null?(s.groups||[]).find(g=>g.id===gid):null;
+  state.bin.push({id:state.nid++,isGroup:false,label:task.text,due:task.due,
     secId:sid,secTitle:s.title,gid:gid??null,groupTitle:g?.title??null,task,deletedAt:new Date().toISOString()});
-  render();
-}
-function trashGroup(sid,gid){
-  const s=sections.find(s=>s.id===sid);if(!s)return;
-  const idx=s.groups.findIndex(g=>g.id===gid);if(idx<0)return;
+  pushState();
+};
+window.trashGroup=(sid,gid)=>{
+  const s=state.sections.find(s=>s.id===sid);if(!s)return;
+  const idx=(s.groups||[]).findIndex(g=>g.id===gid);if(idx<0)return;
   const[g]=s.groups.splice(idx,1);
-  bin.push({id:nid++,isGroup:true,label:g.title,due:'',
+  state.bin.push({id:state.nid++,isGroup:true,label:g.title,due:'',
     secId:sid,secTitle:s.title,gid,groupTitle:g.title,group:g,deletedAt:new Date().toISOString()});
-  render();
-}
-function restoreItem(bid){
-  const idx=bin.findIndex(b=>b.id===bid);if(idx<0)return;
-  const[b]=bin.splice(idx,1);
-  const s=sections.find(s=>s.id===b.secId)||sections[0];if(!s)return;
-  if(b.isGroup){s.groups.push(b.group);}
+  pushState();
+};
+window.restoreItem=bid=>{
+  const idx=(state.bin||[]).findIndex(b=>b.id===bid);if(idx<0)return;
+  const[b]=state.bin.splice(idx,1);
+  const s=state.sections.find(s=>s.id===b.secId)||state.sections[0];if(!s)return;
+  if(b.isGroup){s.groups=s.groups||[];s.groups.push(b.group);}
   else{const list=getTaskList(s.id,b.gid);if(list)list.push(b.task);else s.tasks.push(b.task);}
-  render();
-}
-function permDel(bid){bin=bin.filter(b=>b.id!==bid);renderBin();saveState();document.getElementById('bin-count').textContent='('+bin.length+')';}
-function setFilter(f,btn){filter=f;document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');render();}
+  pushState();
+};
+window.permDel=bid=>{state.bin=(state.bin||[]).filter(b=>b.id!==bid);pushState();};
+window.setFilter=(f,btn)=>{filter=f;document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');render();};
 
-function showAddGrp(sid){
+// picker
+window.togglePicker=(key,e)=>{
+  e.stopPropagation();
+  const drop=document.getElementById('wdrop-'+key);if(!drop)return;
+  const isOpen=drop.style.display!=='none';
+  if(openPicker&&openPicker!==key){const old=document.getElementById('wdrop-'+openPicker);if(old)old.style.display='none';}
+  drop.style.display=isOpen?'none':'block';
+  openPicker=isOpen?null:key;
+};
+window.togglePerson=(key,name)=>{
+  const isEdit=key.startsWith('edit_');
+  const sel=isEdit?editPickerSel:(pickerSel[key]=pickerSel[key]||new Set());
+  if(sel.has(name))sel.delete(name);else sel.add(name);
+  const btn=document.getElementById('wbtn-'+key);
+  if(btn)btn.textContent=sel.size===0?'負責人':[...sel].join('、');
+  const drop=document.getElementById('wdrop-'+key);
+  if(drop)drop.querySelectorAll('.who-option').forEach(el=>{
+    const n=el.textContent.trim();const chk=el.querySelector('.who-check');
+    if(chk)chk.className='who-check'+(sel.has(n)?' on':'');
+  });
+};
+window.addPerson=(key)=>{
+  const inp=document.getElementById('newp-'+key);
+  const name=inp?.value.trim();
+  if(!name||(state.people||[]).includes(name))return;
+  state.people=state.people||[];state.people.push(name);
+  inp.value='';pushState();
+};
+
+window.showAddGrp=sid=>{
   document.getElementById('agf-'+sid).style.display='block';
   document.getElementById('agb-'+sid).querySelector('.add-grp-btn').style.display='none';
   document.getElementById('agi-'+sid).focus();
-}
-function hideAddGrp(sid){
+};
+window.hideAddGrp=sid=>{
   document.getElementById('agf-'+sid).style.display='none';
   document.getElementById('agb-'+sid).querySelector('.add-grp-btn').style.display='';
   document.getElementById('agi-'+sid).value='';
-}
-function confirmAddGrp(sid){
+};
+window.confirmAddGrp=sid=>{
   const v=document.getElementById('agi-'+sid)?.value.trim();if(!v)return;
-  const s=sections.find(s=>s.id===sid);
-  if(s)s.groups.push({id:nid++,title:v,open:true,tasks:[]});
-  render();
-}
-function showNewSec(){document.getElementById('new-sec-form').style.display='flex';document.getElementById('new-sec-input').focus();}
-function cancelNewSec(){document.getElementById('new-sec-form').style.display='none';document.getElementById('new-sec-input').value='';}
-function confirmNewSec(){
+  const s=state.sections.find(s=>s.id===sid);
+  if(s){s.groups=s.groups||[];s.groups.push({id:state.nid++,title:v,open:true,tasks:[]});}
+  pushState();
+};
+window.showNewSec=()=>{document.getElementById('new-sec-form').style.display='flex';document.getElementById('new-sec-input').focus();};
+window.cancelNewSec=()=>{document.getElementById('new-sec-form').style.display='none';document.getElementById('new-sec-input').value='';};
+window.confirmNewSec=()=>{
   const v=document.getElementById('new-sec-input').value.trim();if(!v)return;
-  sections.push({id:nid++,title:v,open:true,groups:[],tasks:[]});
-  cancelNewSec();render();
-}
-document.getElementById('new-sec-input').addEventListener('keydown',e=>{if(e.key==='Enter')confirmNewSec();if(e.key==='Escape')cancelNewSec();});
+  state.sections.push({id:state.nid++,title:v,open:true,groups:[],tasks:[]});
+  window.cancelNewSec();pushState();
+};
 
-loadState();
-render();
+document.addEventListener('click',()=>{
+  if(openPicker){const d=document.getElementById('wdrop-'+openPicker);if(d)d.style.display='none';openPicker=null;}
+});
 </script>
 </body>
 </html>
