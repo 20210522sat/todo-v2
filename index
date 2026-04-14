@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>共享代辦清單</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="代辦清單" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f4;
+      --bg-tertiary: #eeece8;
+      --bg-info: #e6f1fb;
+      --bg-danger: #fcebeb;
+      --bg-success: #eaf3de;
+      --bg-warning: #faeeda;
+      --text-primary: #1a1a18;
+      --text-secondary: #5f5e5a;
+      --text-tertiary: #888780;
+      --text-info: #0c447c;
+      --text-danger: #a32d2d;
+      --text-success: #27500a;
+      --text-warning: #633806;
+      --border-tertiary: rgba(0,0,0,0.12);
+      --border-secondary: rgba(0,0,0,0.22);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #1e1e1c;
+        --bg-secondary: #2a2a27;
+        --bg-tertiary: #323230;
+        --bg-info: #042c53;
+        --bg-danger: #501313;
+        --bg-success: #173404;
+        --bg-warning: #412402;
+        --text-primary: #f0ede8;
+        --text-secondary: #b4b2a9;
+        --text-tertiary: #888780;
+        --text-info: #85b7eb;
+        --text-danger: #f09595;
+        --text-success: #97c459;
+        --text-warning: #ef9f27;
+        --border-tertiary: rgba(255,255,255,0.1);
+        --border-secondary: rgba(255,255,255,0.2);
+      }
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    .app {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .top-bar h1 {
+      font-size: 20px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .summary-badge {
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+    }
+
+    .filters {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .fb {
+      padding: 4px 12px;
+      border: 0.5px solid var(--border-tertiary);
+      border-radius: 99px;
+      font-size: 13px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .fb.on {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border-color: var(--border-secondary);
+    }
+
+    .section {
+      margin-bottom: 1rem;
+      border: 0.5px solid var(--border-tertiary);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-primary);
+    }
+
+    .sec-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      user-select: none;
+      background: var(--bg-secondary);
+    }
+
+    .sec-header:hover { background: var(--bg-tertiary); }
+
+    .chevron {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+      color: var(--text-tertiary);
+    }
+
+    .chevron.open { transform: rotate(90deg); }
+
+    .sec-title {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .sec-count { font-size: 12px; color: var(--text-tertiary); }
+
+    .sec-body { border-top: 0.5px solid var(--border-tertiary); }
+
+    .add-row {
+      display: flex;
+      gap: 6px;
+      padding: 8px 10px;
+      border-bottom: 0.5px solid var(--border-tertiary);
+      flex-wrap: wrap;
+    }
+
+    .add-row input[type="text"] {
+      flex: 1;
+      min-width: 100px;
+      font-size: 13px;
+      padding: 5px 8px;
+      border: 0.5px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .add-row input[type="date"],
+    .add-row select {
+      font-size: 13px;
+      padding: 5px 8px;
+      border: 0.5px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .add-row button, .sec-add-btn, .new-sec-row button {
+      font-size: 13px;
+      padding: 5px 10px;
+      border: 0.5px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      background: transparent;
+      color: var(--text-primary);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .add-row button:hover,
+    .sec-add-btn:hover,
+    .new-sec-row button:hover { background: var(--bg-secondary); }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-bottom: 0.5px solid var(--border-tertiary);
+    }
+
+    .todo-item:last-child { border-bottom: none; }
+    .todo-item.done { opacity: 0.5; }
+
+    .chk {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-secondary);
+      background: transparent;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chk.yes { background: #1D9E75; border-color: #1D9E75; }
+
+    .chk svg {
+      width: 10px;
+      height: 10px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .task-body { flex: 1; min-width: 0; }
+
+    .task-text {
+      font-size: 14px;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .todo-item.done .task-text {
+      text-decoration: line-through;
+      color: var(--text-tertiary);
+    }
+
+    .task-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+      flex-wrap: wrap;
+    }
+
+    .assignee {
+      font-size: 11px;
+      padding: 1px 7px;
+      border-radius: 99px;
+      font-weight: 500;
+    }
+
+    .due { font-size: 11px; color: var(--text-tertiary); }
+    .due.soon { color: #BA7517; background: #FAEEDA; padding: 1px 6px; border-radius: 99px; }
+    .due.over { color: #A32D2D; background: #FCEBEB; padding: 1px 6px; border-radius: 99px; }
+
+    .trash-btn {
+      width: 26px;
+      height: 26px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      flex-shrink: 0;
+    }
+
+    .trash-btn:hover { background: var(--bg-danger); color: var(--text-danger); }
+
+    .bin-section {
+      margin-top: 1.5rem;
+      border: 0.5px dashed var(--border-secondary);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-primary);
+    }
+
+    .bin-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .bin-header:hover { background: var(--bg-secondary); }
+    .bin-title { flex: 1; font-size: 13px; color: var(--text-secondary); }
+
+    .bin-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-top: 0.5px solid var(--border-tertiary);
+    }
+
+    .bin-item-text {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      text-decoration: line-through;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bin-meta { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; }
+
+    .restore-btn {
+      font-size: 12px;
+      padding: 3px 8px;
+      border: 0.5px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .restore-btn:hover { background: var(--bg-secondary); }
+
+    .perm-del {
+      width: 22px;
+      height: 22px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--text-tertiary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+    }
+
+    .perm-del:hover { color: var(--text-danger); }
+
+    .empty-hint {
+      padding: 12px;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      text-align: center;
+    }
+
+    .sec-add-btn {
+      margin-top: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .new-sec-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 0.5rem;
+    }
+
+    .new-sec-row input {
+      flex: 1;
+      font-size: 14px;
+      padding: 6px 10px;
+      border: 0.5px solid var(--border-secondary);
+      border-radius: var(--radius-md);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="top-bar">
+      <h1>共享代辦清單</h1>
+      <span class="summary-badge" id="top-badge">0 / 0 完成</span>
+    </div>
+    <div class="filters">
+      <button class="fb on" onclick="setFilter('all',this)">全部</button>
+      <button class="fb" onclick="setFilter('active',this)">未完成</button>
+      <button class="fb" onclick="setFilter('done',this)">已完成</button>
+      <button class="fb" onclick="setFilter('overdue',this)">已逾期</button>
+    </div>
+    <div id="sections-wrap"></div>
+    <div id="new-sec-wrap">
+      <button class="sec-add-btn" onclick="showNewSec()">＋ 新增分類</button>
+    </div>
+    <div id="new-sec-form" style="display:none" class="new-sec-row">
+      <input type="text" id="new-sec-input" placeholder="分類名稱..." maxlength="30" />
+      <button onclick="confirmNewSec()">確認</button>
+      <button onclick="cancelNewSec()">取消</button>
+    </div>
+    <div class="bin-section" id="bin-section">
+      <div class="bin-header" onclick="toggleBin()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text-tertiary);flex-shrink:0">
+          <polyline points="2,4 12,4"/>
+          <path d="M5,4V2.5h4V4"/>
+          <path d="M3,4l.7,8h6.6L11,4"/>
+          <line x1="5.5" y1="6.5" x2="5.5" y2="10"/>
+          <line x1="8.5" y1="6.5" x2="8.5" y2="10"/>
+        </svg>
+        <span class="bin-title">垃圾桶 <span id="bin-count" style="font-size:11px">(0)</span></span>
+        <span style="font-size:11px;color:var(--text-tertiary)">7 天後自動清除</span>
+        <svg id="bin-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text-tertiary);transition:transform .2s">
+          <polyline points="5,3 9,7 5,11"/>
+        </svg>
+      </div>
+      <div id="bin-body" style="display:none"></div>
+    </div>
+  </div>
+
+  <script>
+    const COLORS = {
+      '小明': { bg: '#E6F1FB', col: '#0C447C' },
+      '小華': { bg: '#E1F5EE', col: '#085041' },
+      '小美': { bg: '#FBEAF0', col: '#72243E' },
+      '所有人': { bg: '#F1EFE8', col: '#444441' }
+    };
+    const PEOPLE = ['小明', '小華', '小美', '所有人'];
+    let nid = 10;
+
+    const today = () => new Date().toISOString().slice(0, 10);
+    const addDays = (d, n) => { const dt = new Date(d); dt.setDate(dt.getDate() + n); return dt.toISOString().slice(0, 10); };
+
+    const STORAGE_KEY = 'shared-todo-v1';
+
+    function saveState() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ sections, bin, nid })); } catch(e) {}
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) { const s = JSON.parse(raw); sections = s.sections; bin = s.bin; nid = s.nid; }
+      } catch(e) {}
+    }
+
+    let sections = [
+      { id: 1, title: '工作任務', open: true, tasks: [
+        { id: 1, text: '準備週會簡報', assignee: '小明', done: false, due: addDays(today(), 1) },
+        { id: 2, text: '更新專案文件', assignee: '小美', done: false, due: addDays(today(), 5) },
+        { id: 3, text: '回覆客戶信件', assignee: '小華', done: true, due: addDays(today(), -1) },
+      ]},
+      { id: 2, title: '生活雜事', open: true, tasks: [
+        { id: 4, text: '安排下次團隊聚餐', assignee: '所有人', done: false, due: addDays(today(), 10) },
+        { id: 5, text: '購買辦公室零食', assignee: '小美', done: false, due: addDays(today(), 3) },
+      ]},
+    ];
+    let bin = [];
+    let filter = 'all';
+    let binOpen = false;
+
+    loadState();
+
+    function dueLabel(due, done) {
+      if (!due) return null;
+      const now = new Date(); now.setHours(0, 0, 0, 0);
+      const d = new Date(due); d.setHours(0, 0, 0, 0);
+      const diff = Math.round((d - now) / (1000 * 60 * 60 * 24));
+      if (done) return { text: '到期: ' + fmtDate(due), cls: 'due' };
+      if (diff < 0) return { text: '已逾期 ' + Math.abs(diff) + ' 天', cls: 'due over' };
+      if (diff === 0) return { text: '今天到期', cls: 'due soon' };
+      if (diff <= 3) return { text: diff + ' 天後到期', cls: 'due soon' };
+      return { text: fmtDate(due), cls: 'due' };
+    }
+
+    function fmtDate(d) { if (!d) return ''; const p = d.split('-'); return p[1] + '/' + p[2]; }
+
+    function isVisible(task) {
+      if (filter === 'active') return !task.done;
+      if (filter === 'done') return task.done;
+      if (filter === 'overdue') {
+        if (task.done || !task.due) return false;
+        const now = new Date(); now.setHours(0, 0, 0, 0);
+        return new Date(task.due) < now;
+      }
+      return true;
+    }
+
+    function render() {
+      purgeBin();
+      const wrap = document.getElementById('sections-wrap');
+      const total = sections.flatMap(s => s.tasks).length;
+      const done = sections.flatMap(s => s.tasks).filter(t => t.done).length;
+      document.getElementById('top-badge').textContent = done + ' / ' + total + ' 完成';
+      wrap.innerHTML = sections.map(sec => renderSection(sec)).join('');
+      renderBin();
+      saveState();
+    }
+
+    function renderSection(sec) {
+      const visible = sec.tasks.filter(isVisible);
+      const secDone = sec.tasks.filter(t => t.done).length;
+      return `<div class="section" id="sec-${sec.id}">
+        <div class="sec-header" onclick="toggleSec(${sec.id})">
+          <svg class="chevron${sec.open ? ' open' : ''}" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <polyline points="5,3 9,7 5,11"/>
+          </svg>
+          <span class="sec-title">${sec.title}</span>
+          <span class="sec-count">${secDone}/${sec.tasks.length}</span>
+        </div>
+        ${sec.open ? `<div class="sec-body">
+          <div class="add-row">
+            <input type="text" placeholder="新增任務..." id="inp-${sec.id}" maxlength="60" onkeydown="if(event.key==='Enter')addTask(${sec.id})" />
+            <input type="date" id="date-${sec.id}" min="${today()}" />
+            <select id="who-${sec.id}">${PEOPLE.map(p => `<option>${p}</option>`).join('')}</select>
+            <button onclick="addTask(${sec.id})">新增</button>
+          </div>
+          ${visible.length ? visible.map(t => renderTask(t, sec.id)).join('') : '<div class="empty-hint">此分類沒有符合的任務</div>'}
+        </div>` : ''}
+      </div>`;
+    }
+
+    function renderTask(t, sid) {
+      const dl = dueLabel(t.due, t.done);
+      const ac = COLORS[t.assignee] || COLORS['所有人'];
+      return `<div class="todo-item${t.done ? ' done' : ''}">
+        <button class="chk${t.done ? ' yes' : ''}" onclick="toggleTask(${sid},${t.id})">
+          ${t.done ? `<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>` : ''}
+        </button>
+        <div class="task-body">
+          <div class="task-text">${t.text}</div>
+          <div class="task-meta">
+            <span class="assignee" style="background:${ac.bg};color:${ac.col}">${t.assignee}</span>
+            ${dl ? `<span class="${dl.cls}">${dl.text}</span>` : ''}
+          </div>
+        </div>
+        <button class="trash-btn" onclick="trashTask(${sid},${t.id})" title="移至垃圾桶">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <polyline points="2,4 12,4"/>
+            <path d="M5,4V2.5h4V4"/>
+            <path d="M3,4l.7,8h6.6L11,4"/>
+          </svg>
+        </button>
+      </div>`;
+    }
+
+    function renderBin() {
+      document.getElementById('bin-count').textContent = '(' + bin.length + ')';
+      if (!binOpen) { document.getElementById('bin-body').style.display = 'none'; return; }
+      document.getElementById('bin-body').style.display = 'block';
+      const body = document.getElementById('bin-body');
+      if (!bin.length) { body.innerHTML = '<div class="empty-hint">垃圾桶是空的</div>'; return; }
+      body.innerHTML = bin.map(b => {
+        const expires = new Date(new Date(b.deletedAt).getTime() + 7 * 24 * 60 * 60 * 1000);
+        const left = Math.ceil((expires - new Date()) / (1000 * 60 * 60 * 24));
+        return `<div class="bin-item">
+          <div style="flex:1;min-width:0">
+            <div class="bin-item-text">${b.task.text}</div>
+            <div style="font-size:11px;color:var(--text-tertiary);margin-top:2px">${b.secTitle} · ${b.task.assignee}${b.task.due ? ' · ' + fmtDate(b.task.due) : ''}</div>
+          </div>
+          <span class="bin-meta">${left} 天後刪除</span>
+          <button class="restore-btn" onclick="restoreTask(${b.id})">還原</button>
+          <button class="perm-del" onclick="permDel(${b.id})" title="永久刪除">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/>
+            </svg>
+          </button>
+        </div>`;
+      }).join('');
+    }
+
+    function purgeBin() {
+      const now = new Date();
+      bin = bin.filter(b => new Date(b.deletedAt).getTime() + 7 * 24 * 60 * 60 * 1000 > now);
+    }
+
+    function toggleSec(id) { const s = sections.find(s => s.id === id); if (s) s.open = !s.open; render(); }
+    function toggleBin() {
+      binOpen = !binOpen;
+      const ch = document.getElementById('bin-chevron');
+      if (ch) ch.style.transform = binOpen ? 'rotate(90deg)' : '';
+      renderBin();
+    }
+    function toggleTask(sid, tid) { const s = sections.find(s => s.id === sid); const t = s?.tasks.find(t => t.id === tid); if (t) t.done = !t.done; render(); }
+    function addTask(sid) {
+      const inp = document.getElementById('inp-' + sid);
+      const text = inp?.value.trim();
+      if (!text) return;
+      const due = document.getElementById('date-' + sid)?.value || '';
+      const who = document.getElementById('who-' + sid)?.value || '所有人';
+      const s = sections.find(s => s.id === sid);
+      if (s) s.tasks.push({ id: nid++, text, assignee: who, done: false, due });
+      render();
+    }
+    function trashTask(sid, tid) {
+      const s = sections.find(s => s.id === sid);
+      if (!s) return;
+      const idx = s.tasks.findIndex(t => t.id === tid);
+      if (idx < 0) return;
+      const [task] = s.tasks.splice(idx, 1);
+      bin.push({ id: nid++, task, secId: sid, secTitle: s.title, deletedAt: new Date().toISOString() });
+      render();
+    }
+    function restoreTask(bid) {
+      const idx = bin.findIndex(b => b.id === bid);
+      if (idx < 0) return;
+      const [b] = bin.splice(idx, 1);
+      const s = sections.find(s => s.id === b.secId) || sections[0];
+      if (s) s.tasks.push(b.task);
+      render();
+    }
+    function permDel(bid) { bin = bin.filter(b => b.id !== bid); renderBin(); saveState(); document.getElementById('bin-count').textContent = '(' + bin.length + ')'; }
+    function setFilter(f, btn) { filter = f; document.querySelectorAll('.fb').forEach(b => b.classList.remove('on')); btn.classList.add('on'); render(); }
+    function showNewSec() { document.getElementById('new-sec-form').style.display = 'flex'; document.getElementById('new-sec-input').focus(); }
+    function cancelNewSec() { document.getElementById('new-sec-form').style.display = 'none'; document.getElementById('new-sec-input').value = ''; }
+    function confirmNewSec() {
+      const v = document.getElementById('new-sec-input').value.trim();
+      if (!v) return;
+      sections.push({ id: nid++, title: v, open: true, tasks: [] });
+      cancelNewSec();
+      render();
+    }
+    document.getElementById('new-sec-input')?.addEventListener('keydown', e => { if (e.key === 'Enter') confirmNewSec(); if (e.key === 'Escape') cancelNewSec(); });
+    render();
+  </script>
+</body>
+</html>
+
+# 共享代辦清單
+
+一個純前端的共享代辦清單，無需後端，單一 HTML 檔案即可使用。
+
+## 功能
+
+- **分類管理** — 建立多個分類，每個分類可獨立收合／展開
+- **截止日期** — 設定到期日，3 天內警示橘色、逾期顯示紅色
+- **負責人標籤** — 每筆任務可指派負責人，顏色區分
+- **垃圾桶機制** — 刪除任務先移至垃圾桶，7 天後自動清除，可隨時還原
+- **篩選** — 全部 / 未完成 / 已完成 / 已逾期
+- **本地儲存** — 資料存於 `localStorage`，重新整理不會遺失
+- **深色模式** — 自動跟隨系統設定
+
+## 使用方式
+
+直接在瀏覽器開啟 `index.html` 即可，無需安裝任何套件。
+
+## 部署到 GitHub Pages
+
+1. 將此專案推送到 GitHub repository
+2. 進入 repository 的 **Settings → Pages**
+3. Source 選擇 `main` 分支，資料夾選 `/ (root)`
+4. 儲存後稍等片刻，即可透過 `https://<username>.github.io/<repo-name>/` 存取
+
+## 自訂負責人
+
+在 `index.html` 的 `<script>` 區段找到：
+
+```js
+const PEOPLE = ['小明', '小華', '小美', '所有人'];
+```
+
+修改為你的團隊成員名稱即可。
