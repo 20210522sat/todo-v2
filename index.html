@@ -11,98 +11,124 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="代辦清單" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg-primary:#ffffff; --bg-secondary:#f5f5f4; --bg-tertiary:#eeece8; --bg-group:#fafaf9;
-      --text-primary:#1a1a18; --text-secondary:#5f5e5a; --text-tertiary:#888780;
-      --text-info:#0c447c; --text-danger:#a32d2d;
-      --border-tertiary:rgba(0,0,0,0.10); --border-secondary:rgba(0,0,0,0.20);
-      --radius-md:8px; --radius-lg:12px;
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg-primary:#ffffff;--bg-secondary:#f5f5f4;--bg-tertiary:#eeece8;--bg-group:#fafaf9;
+      --text-primary:#1a1a18;--text-secondary:#5f5e5a;--text-tertiary:#888780;
+      --text-danger:#a32d2d;
+      --border-t:rgba(0,0,0,0.10);--border-s:rgba(0,0,0,0.20);
+      --r-md:8px;--r-lg:12px;
     }
-    @media (prefers-color-scheme:dark) {
-      :root {
-        --bg-primary:#1e1e1c; --bg-secondary:#2a2a27; --bg-tertiary:#323230; --bg-group:#252523;
-        --text-primary:#f0ede8; --text-secondary:#b4b2a9; --text-tertiary:#888780;
-        --text-info:#85b7eb; --text-danger:#f09595;
-        --border-tertiary:rgba(255,255,255,0.08); --border-secondary:rgba(255,255,255,0.18);
+    @media(prefers-color-scheme:dark){
+      :root{
+        --bg-primary:#1e1e1c;--bg-secondary:#2a2a27;--bg-tertiary:#323230;--bg-group:#252523;
+        --text-primary:#f0ede8;--text-secondary:#b4b2a9;--text-tertiary:#888780;
+        --text-danger:#f09595;
+        --border-t:rgba(255,255,255,0.08);--border-s:rgba(255,255,255,0.18);
       }
     }
-    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg-tertiary); color:var(--text-primary); min-height:100vh; padding:2rem 1rem; }
-    .app { max-width:640px; margin:0 auto; }
-    .top-bar { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; }
-    .top-bar h1 { font-size:20px; font-weight:500; }
-    .summary-badge { font-size:12px; padding:3px 10px; border-radius:99px; background:var(--bg-secondary); color:var(--text-secondary); }
-    .filters { display:flex; gap:6px; margin-bottom:1rem; flex-wrap:wrap; }
-    .fb { padding:4px 12px; border:0.5px solid var(--border-tertiary); border-radius:99px; font-size:13px; background:transparent; color:var(--text-secondary); cursor:pointer; }
-    .fb.on { background:var(--bg-secondary); color:var(--text-primary); border-color:var(--border-secondary); }
-    .section { margin-bottom:1rem; border:0.5px solid var(--border-tertiary); border-radius:var(--radius-lg); overflow:hidden; background:var(--bg-primary); }
-    .sec-header { display:flex; align-items:center; gap:8px; padding:11px 14px; cursor:pointer; user-select:none; background:var(--bg-secondary); }
-    .sec-header:hover { background:var(--bg-tertiary); }
-    .sec-title { flex:1; font-size:14px; font-weight:500; }
-    .sec-count { font-size:12px; color:var(--text-tertiary); }
-    .sec-body { border-top:0.5px solid var(--border-tertiary); }
-    .group { border-top:0.5px solid var(--border-tertiary); }
-    .group:first-child { border-top:none; }
-    .group-header { display:flex; align-items:center; gap:8px; padding:8px 14px; cursor:pointer; user-select:none; background:var(--bg-group); }
-    .group-header:hover { background:var(--bg-secondary); }
-    .group-title { flex:1; font-size:13px; font-weight:500; color:var(--text-secondary); }
-    .group-count { font-size:11px; color:var(--text-tertiary); }
-    .group-del { width:20px; height:20px; border:none; background:transparent; cursor:pointer; color:var(--text-tertiary); display:flex; align-items:center; justify-content:center; border-radius:4px; }
-    .group-del:hover { color:var(--text-danger); background:rgba(163,45,45,0.08); }
-    .group-body { background:var(--bg-primary); }
-    .add-row { display:flex; gap:6px; padding:7px 10px; border-top:0.5px solid var(--border-tertiary); flex-wrap:wrap; background:var(--bg-primary); }
-    .add-row input[type="text"] { flex:1; min-width:90px; font-size:13px; padding:5px 8px; border:0.5px solid var(--border-secondary); border-radius:var(--radius-md); background:var(--bg-primary); color:var(--text-primary); outline:none; }
-    .add-row input[type="date"], .add-row select { font-size:13px; padding:5px 8px; border:0.5px solid var(--border-secondary); border-radius:var(--radius-md); background:var(--bg-primary); color:var(--text-secondary); outline:none; cursor:pointer; }
-    .add-row button { font-size:13px; padding:5px 10px; border:0.5px solid var(--border-secondary); border-radius:var(--radius-md); background:transparent; color:var(--text-primary); cursor:pointer; white-space:nowrap; }
-    .add-row button:hover { background:var(--bg-secondary); }
-    .add-group-row { display:flex; gap:6px; padding:6px 10px; border-top:0.5px dashed var(--border-tertiary); background:var(--bg-group); }
-    .add-group-row input { flex:1; font-size:13px; padding:4px 8px; border:0.5px solid var(--border-secondary); border-radius:var(--radius-md); background:var(--bg-primary); color:var(--text-primary); outline:none; }
-    .add-group-row button { font-size:12px; padding:4px 9px; border:0.5px solid var(--border-secondary); border-radius:var(--radius-md); background:transparent; color:var(--text-secondary); cursor:pointer; white-space:nowrap; }
-    .add-group-row button:hover { background:var(--bg-secondary); }
-    .add-group-btn { display:flex; align-items:center; gap:5px; padding:7px 14px; border:none; background:transparent; color:var(--text-tertiary); font-size:12px; cursor:pointer; border-top:0.5px dashed var(--border-tertiary); width:100%; text-align:left; }
-    .add-group-btn:hover { color:var(--text-secondary); background:var(--bg-group); }
-    .todo-item { display:flex; align-items:center; gap:8px; padding:8px 12px; border-top:0.5px solid var(--border-tertiary); }
-    .todo-item.done { opacity:0.5; }
-    .chk { width:18px; height:18px; border-radius:50%; border:1.5px solid var(--border-secondary); background:transparent; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-    .chk.yes { background:#1D9E75; border-color:#1D9E75; }
-    .chk svg { width:10px; height:10px; stroke:white; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
-    .task-body { flex:1; min-width:0; }
-    .task-text { font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .todo-item.done .task-text { text-decoration:line-through; color:var(--text-tertiary); }
-    .task-meta { display:flex; align-items:center; gap:6px; margin-top:2px; flex-wrap:wrap; }
-    .assignee { font-size:11px; padding:1px 7px; border-radius:99px; font-weight:500; }
-    .due { font-size:11px; color:var(--text-tertiary); }
-    .due.soon { color:#BA7517; background:#FAEEDA; padding:1px 6px; border-radius:99px; }
-    .due.over { color:#A32D2D; background:#FCEBEB; padding:1px 6px; border-radius:99px; }
-    .trash-btn { width:26px; height:26px; border:none; background:transparent; cursor:pointer; color:var(--text-tertiary); display:flex; align-items:center; justify-content:center; border-radius:var(--radius-md); flex-shrink:0; }
-    .trash-btn:hover { background:rgba(163,45,45,0.08); color:var(--text-danger); }
-    .chevron { width:13px; height:13px; flex-shrink:0; transition:transform 0.2s; color:var(--text-tertiary); }
-    .chevron.open { transform:rotate(90deg); }
-    .sec-add-btn { margin-top:0.5rem; font-size:13px; padding:5px 10px; border:0.5px solid var(--border-secondary); border-radius:var(--radius-md); background:transparent; color:var(--text-secondary); cursor:pointer; }
-    .sec-add-btn:hover { background:var(--bg-secondary); }
-    .new-sec-row { display:flex; gap:6px; margin-top:0.5rem; }
-    .new-sec-row input { flex:1; font-size:14px; padding:6px 10px; border:0.5px solid var(--border-secondary); border-radius:var(--radius-md); background:var(--bg-primary); color:var(--text-primary); outline:none; }
-    .new-sec-row button { font-size:13px; padding:6px 12px; border:0.5px solid var(--border-secondary); border-radius:var(--radius-md); background:transparent; color:var(--text-primary); cursor:pointer; }
-    .new-sec-row button:hover { background:var(--bg-secondary); }
-    .bin-section { margin-top:1.5rem; border:0.5px dashed var(--border-secondary); border-radius:var(--radius-lg); overflow:hidden; background:var(--bg-primary); }
-    .bin-header { display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer; user-select:none; }
-    .bin-header:hover { background:var(--bg-secondary); }
-    .bin-title { flex:1; font-size:13px; color:var(--text-secondary); }
-    .bin-item { display:flex; align-items:center; gap:8px; padding:8px 12px; border-top:0.5px solid var(--border-tertiary); }
-    .bin-item-text { flex:1; font-size:13px; color:var(--text-tertiary); text-decoration:line-through; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .bin-meta { font-size:11px; color:var(--text-tertiary); white-space:nowrap; }
-    .restore-btn { font-size:12px; padding:3px 8px; border:0.5px solid var(--border-secondary); border-radius:var(--radius-md); background:transparent; color:var(--text-secondary); cursor:pointer; white-space:nowrap; }
-    .restore-btn:hover { background:var(--bg-secondary); }
-    .perm-del { width:22px; height:22px; border:none; background:transparent; cursor:pointer; color:var(--text-tertiary); display:flex; align-items:center; justify-content:center; border-radius:var(--radius-md); }
-    .perm-del:hover { color:var(--text-danger); }
-    .empty-hint { padding:12px; font-size:13px; color:var(--text-tertiary); text-align:center; }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-tertiary);color:var(--text-primary);min-height:100vh;padding:2rem 1rem}
+    .app{max-width:640px;margin:0 auto}
+    /* top */
+    .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
+    .top-bar h1{font-size:20px;font-weight:500}
+    .badge{font-size:12px;padding:3px 10px;border-radius:99px;background:var(--bg-secondary);color:var(--text-secondary)}
+    /* filters */
+    .filters{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
+    .fb{padding:4px 12px;border:0.5px solid var(--border-t);border-radius:99px;font-size:13px;background:transparent;color:var(--text-secondary);cursor:pointer}
+    .fb.on{background:var(--bg-secondary);color:var(--text-primary);border-color:var(--border-s)}
+    /* section */
+    .section{margin-bottom:1rem;border:0.5px solid var(--border-t);border-radius:var(--r-lg);overflow:hidden;background:var(--bg-primary)}
+    .sec-hd{display:flex;align-items:center;gap:8px;padding:11px 14px;cursor:pointer;user-select:none;background:var(--bg-secondary)}
+    .sec-hd:hover{background:var(--bg-tertiary)}
+    .sec-title{flex:1;font-size:14px;font-weight:500}
+    .sec-count{font-size:12px;color:var(--text-tertiary)}
+    .sec-body{border-top:0.5px solid var(--border-t)}
+    /* group */
+    .group{border-top:0.5px solid var(--border-t)}
+    .group:first-child{border-top:none}
+    .grp-hd{display:flex;align-items:center;gap:8px;padding:8px 14px;cursor:pointer;user-select:none;background:var(--bg-group)}
+    .grp-hd:hover{background:var(--bg-secondary)}
+    .grp-title{flex:1;font-size:13px;font-weight:500;color:var(--text-secondary)}
+    .grp-count{font-size:11px;color:var(--text-tertiary)}
+    .grp-del{width:20px;height:20px;border:none;background:transparent;cursor:pointer;color:var(--text-tertiary);display:flex;align-items:center;justify-content:center;border-radius:4px}
+    .grp-del:hover{color:var(--text-danger);background:rgba(163,45,45,0.08)}
+    .grp-body{background:var(--bg-primary)}
+    /* add-task row */
+    .add-row{display:flex;gap:6px;padding:7px 10px;border-top:0.5px solid var(--border-t);flex-wrap:wrap;background:var(--bg-primary)}
+    .add-row input[type=text]{flex:1;min-width:80px;font-size:13px;padding:5px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);outline:none}
+    .add-row input[type=date]{font-size:13px;padding:5px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-secondary);outline:none;cursor:pointer}
+    .add-row button,.btn-ghost{font-size:13px;padding:5px 10px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:transparent;color:var(--text-primary);cursor:pointer;white-space:nowrap}
+    .add-row button:hover,.btn-ghost:hover{background:var(--bg-secondary)}
+    /* assignee picker */
+    .who-wrap{position:relative;display:inline-block}
+    .who-btn{font-size:12px;padding:4px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis}
+    .who-btn:hover{background:var(--bg-secondary)}
+    .who-dropdown{position:absolute;top:calc(100% + 4px);left:0;z-index:100;background:var(--bg-primary);border:0.5px solid var(--border-s);border-radius:var(--r-md);padding:4px;min-width:130px;box-shadow:0 4px 12px rgba(0,0,0,0.10)}
+    .who-option{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--text-primary)}
+    .who-option:hover{background:var(--bg-secondary)}
+    .who-check{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--border-s);flex-shrink:0;display:flex;align-items:center;justify-content:center}
+    .who-check.on{background:#1D9E75;border-color:#1D9E75}
+    .who-check.on::after{content:'';display:block;width:8px;height:8px;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 10 10' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='1.5,5 4,7.5 8.5,2'/%3E%3C/svg%3E") center/contain no-repeat}
+    .who-sep{height:0.5px;background:var(--border-t);margin:4px 0}
+    .who-add-row{display:flex;gap:4px;padding:4px 4px 2px}
+    .who-add-row input{flex:1;font-size:12px;padding:4px 6px;border:0.5px solid var(--border-s);border-radius:6px;background:var(--bg-primary);color:var(--text-primary);outline:none}
+    .who-add-row button{font-size:12px;padding:4px 7px;border:0.5px solid var(--border-s);border-radius:6px;background:transparent;color:var(--text-primary);cursor:pointer}
+    /* add-group */
+    .add-grp-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border:none;background:transparent;color:var(--text-tertiary);font-size:12px;cursor:pointer;border-top:0.5px dashed var(--border-t);width:100%;text-align:left}
+    .add-grp-btn:hover{color:var(--text-secondary);background:var(--bg-group)}
+    .add-grp-row{display:flex;gap:6px;padding:6px 10px;border-top:0.5px dashed var(--border-t);background:var(--bg-group)}
+    .add-grp-row input{flex:1;font-size:13px;padding:4px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);outline:none}
+    .add-grp-row button{font-size:12px;padding:4px 9px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:transparent;color:var(--text-secondary);cursor:pointer;white-space:nowrap}
+    .add-grp-row button:hover{background:var(--bg-secondary)}
+    /* task item */
+    .todo-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:0.5px solid var(--border-t)}
+    .todo-item.done{opacity:0.45}
+    .chk{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border-s);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+    .chk.yes{background:#1D9E75;border-color:#1D9E75}
+    .chk svg{width:10px;height:10px;stroke:white;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+    .task-body{flex:1;min-width:0}
+    .task-text{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .todo-item.done .task-text{text-decoration:line-through;color:var(--text-tertiary)}
+    /* meta row: compact chips */
+    .task-meta{display:flex;align-items:center;gap:4px;margin-top:3px;flex-wrap:wrap}
+    .chip{font-size:11px;padding:1px 6px;border-radius:99px;font-weight:500;line-height:1.5;white-space:nowrap}
+    .chip.due-ok{color:var(--text-tertiary)}
+    .chip.due-soon{color:#854F0B;background:#FAEEDA}
+    .chip.due-over{color:#791F1F;background:#FCEBEB}
+    .meta-dot{font-size:10px;color:var(--text-tertiary);line-height:1}
+    .trash-btn{width:26px;height:26px;border:none;background:transparent;cursor:pointer;color:var(--text-tertiary);display:flex;align-items:center;justify-content:center;border-radius:var(--r-md);flex-shrink:0}
+    .trash-btn:hover{background:rgba(163,45,45,0.08);color:var(--text-danger)}
+    /* chevron */
+    .cv{width:13px;height:13px;flex-shrink:0;transition:transform .2s;color:var(--text-tertiary)}
+    .cv.open{transform:rotate(90deg)}
+    /* add section */
+    .sec-add-btn{margin-top:.5rem;font-size:13px;padding:5px 10px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:transparent;color:var(--text-secondary);cursor:pointer}
+    .sec-add-btn:hover{background:var(--bg-secondary)}
+    .new-sec-row{display:flex;gap:6px;margin-top:.5rem}
+    .new-sec-row input{flex:1;font-size:14px;padding:6px 10px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);outline:none}
+    .new-sec-row button{font-size:13px;padding:6px 12px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:transparent;color:var(--text-primary);cursor:pointer}
+    .new-sec-row button:hover{background:var(--bg-secondary)}
+    /* bin */
+    .bin-section{margin-top:1.5rem;border:0.5px dashed var(--border-s);border-radius:var(--r-lg);overflow:hidden;background:var(--bg-primary)}
+    .bin-hd{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;user-select:none}
+    .bin-hd:hover{background:var(--bg-secondary)}
+    .bin-title{flex:1;font-size:13px;color:var(--text-secondary)}
+    .bin-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:0.5px solid var(--border-t)}
+    .bin-text{flex:1;font-size:13px;color:var(--text-tertiary);text-decoration:line-through;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bin-meta{font-size:11px;color:var(--text-tertiary);white-space:nowrap}
+    .restore-btn{font-size:12px;padding:3px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:transparent;color:var(--text-secondary);cursor:pointer;white-space:nowrap}
+    .restore-btn:hover{background:var(--bg-secondary)}
+    .perm-del{width:22px;height:22px;border:none;background:transparent;cursor:pointer;color:var(--text-tertiary);display:flex;align-items:center;justify-content:center;border-radius:var(--r-md)}
+    .perm-del:hover{color:var(--text-danger)}
+    .empty-hint{padding:12px;font-size:13px;color:var(--text-tertiary);text-align:center}
   </style>
 </head>
 <body>
 <div class="app">
   <div class="top-bar">
     <h1>共享代辦清單</h1>
-    <span class="summary-badge" id="top-badge">0 / 0 完成</span>
+    <span class="badge" id="top-badge">0 / 0 完成</span>
   </div>
   <div class="filters">
     <button class="fb on" onclick="setFilter('all',this)">全部</button>
@@ -111,7 +137,7 @@
     <button class="fb" onclick="setFilter('overdue',this)">已逾期</button>
   </div>
   <div id="sections-wrap"></div>
-  <div id="new-sec-wrap">
+  <div>
     <button class="sec-add-btn" onclick="showNewSec()">＋ 新增分類</button>
   </div>
   <div id="new-sec-form" style="display:none" class="new-sec-row">
@@ -120,160 +146,217 @@
     <button onclick="cancelNewSec()">取消</button>
   </div>
   <div class="bin-section">
-    <div class="bin-header" onclick="toggleBin()">
+    <div class="bin-hd" onclick="toggleBin()">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text-tertiary);flex-shrink:0">
         <polyline points="2,4 12,4"/><path d="M5,4V2.5h4V4"/><path d="M3,4l.7,8h6.6L11,4"/>
         <line x1="5.5" y1="6.5" x2="5.5" y2="10"/><line x1="8.5" y1="6.5" x2="8.5" y2="10"/>
       </svg>
       <span class="bin-title">垃圾桶 <span id="bin-count">(0)</span></span>
       <span style="font-size:11px;color:var(--text-tertiary)">7 天後自動清除</span>
-      <svg id="bin-chevron" width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text-tertiary);transition:transform .2s">
+      <svg id="bin-cv" width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text-tertiary);transition:transform .2s">
         <polyline points="5,3 9,7 5,11"/>
       </svg>
     </div>
     <div id="bin-body" style="display:none"></div>
   </div>
 </div>
-<script>
-const COLORS={'小明':{bg:'#E6F1FB',col:'#0C447C'},'小華':{bg:'#E1F5EE',col:'#085041'},'小美':{bg:'#FBEAF0',col:'#72243E'},'所有人':{bg:'#F1EFE8',col:'#444441'}};
-const PEOPLE=['小明','小華','小美','所有人'];
-let nid=20;
-const today=()=>new Date().toISOString().slice(0,10);
-const addDays=(d,n)=>{const dt=new Date(d);dt.setDate(dt.getDate()+n);return dt.toISOString().slice(0,10)};
-const STORAGE_KEY='shared-todo-v2';
 
-let sections=[
-  {id:1,title:'工作任務',open:true,groups:[
-    {id:2,title:'本週重點',open:true,tasks:[
-      {id:3,text:'準備週會簡報',assignee:'小明',done:false,due:addDays(today(),1)},
-      {id:4,text:'更新專案文件',assignee:'小美',done:false,due:addDays(today(),5)},
+<script>
+// ── People ──────────────────────────────────────────────────────────────────
+let people = ['欣儀','咨妗','所有人'];
+const PCOLORS = [
+  {bg:'#E6F1FB',col:'#0C447C'}, // 欣儀
+  {bg:'#E1F5EE',col:'#085041'}, // 咨妗
+  {bg:'#FBEAF0',col:'#72243E'}, // 新增者預設
+  {bg:'#F1EFE8',col:'#444441'}, // 所有人
+  {bg:'#EEEDFE',col:'#3C3489'},
+  {bg:'#FAEEDA',col:'#633806'},
+];
+function personColor(name) {
+  const idx = people.indexOf(name);
+  return PCOLORS[idx % PCOLORS.length] || PCOLORS[2];
+}
+
+// ── State ────────────────────────────────────────────────────────────────────
+let nid = 20;
+const today = () => new Date().toISOString().slice(0,10);
+const addDays = (d,n) => { const dt=new Date(d); dt.setDate(dt.getDate()+n); return dt.toISOString().slice(0,10); };
+const STORAGE_KEY = 'shared-todo-v3';
+
+let sections = [
+  { id:1, title:'工作任務', open:true, groups:[
+    { id:2, title:'本週重點', open:true, tasks:[
+      { id:3, text:'準備週會簡報', assignees:['欣儀'], done:false, due:addDays(today(),1) },
+      { id:4, text:'更新專案文件', assignees:['咨妗'], done:false, due:addDays(today(),5) },
     ]},
-    {id:5,title:'長期追蹤',open:true,tasks:[
-      {id:6,text:'回覆客戶信件',assignee:'小華',done:true,due:addDays(today(),-1)},
+    { id:5, title:'長期追蹤', open:true, tasks:[
+      { id:6, text:'回覆客戶信件', assignees:['欣儀','咨妗'], done:true, due:addDays(today(),-1) },
     ]},
-  ],tasks:[]},
-  {id:7,title:'生活雜事',open:true,groups:[],tasks:[
-    {id:8,text:'安排下次團隊聚餐',assignee:'所有人',done:false,due:addDays(today(),10)},
-    {id:9,text:'購買辦公室零食',assignee:'小美',done:false,due:addDays(today(),3)},
+  ], tasks:[] },
+  { id:7, title:'生活雜事', open:true, groups:[], tasks:[
+    { id:8, text:'安排下次團隊聚餐', assignees:['所有人'], done:false, due:addDays(today(),10) },
+    { id:9, text:'購買辦公室零食',   assignees:['咨妗'],   done:false, due:addDays(today(),3) },
   ]},
 ];
-let bin=[];
-let filter='all';
-let binOpen=false;
+let bin = [];
+let filter = 'all';
+let binOpen = false;
+// who-picker state per add-row key
+let pickerSel = {}; // key -> Set of names
+let openPicker = null; // currently open picker key
 
-function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify({sections,bin,nid}));}catch(e){}}
-function loadState(){try{const r=localStorage.getItem(STORAGE_KEY);if(r){const s=JSON.parse(r);sections=s.sections;bin=s.bin;nid=s.nid;}}catch(e){}}
-
-function dueLabel(due,done){
-  if(!due)return null;
-  const now=new Date();now.setHours(0,0,0,0);
-  const d=new Date(due);d.setHours(0,0,0,0);
-  const diff=Math.round((d-now)/86400000);
-  if(done)return{text:'到期: '+fmtDate(due),cls:'due'};
-  if(diff<0)return{text:'已逾期 '+Math.abs(diff)+' 天',cls:'due over'};
-  if(diff===0)return{text:'今天到期',cls:'due soon'};
-  if(diff<=3)return{text:diff+' 天後到期',cls:'due soon'};
-  return{text:fmtDate(due),cls:'due'};
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify({sections,bin,nid,people})); } catch(e){}
 }
-function fmtDate(d){if(!d)return'';const p=d.split('-');return p[1]+'/'+p[2];}
-function isVisible(t){
-  if(filter==='active')return!t.done;
-  if(filter==='done')return t.done;
-  if(filter==='overdue'){if(t.done||!t.due)return false;const now=new Date();now.setHours(0,0,0,0);return new Date(t.due)<now;}
+function loadState() {
+  try {
+    const r = localStorage.getItem(STORAGE_KEY);
+    if (r) { const s=JSON.parse(r); sections=s.sections; bin=s.bin; nid=s.nid; if(s.people)people=s.people; }
+  } catch(e){}
+}
+
+// ── Due label ────────────────────────────────────────────────────────────────
+function dueLabel(due, done) {
+  if (!due) return null;
+  const now=new Date(); now.setHours(0,0,0,0);
+  const d=new Date(due); d.setHours(0,0,0,0);
+  const diff=Math.round((d-now)/86400000);
+  if (done) return { text: fmtDate(due), cls:'chip due-ok' };
+  if (diff<0) return { text:'逾期 '+Math.abs(diff)+'天', cls:'chip due-over' };
+  if (diff===0) return { text:'今天', cls:'chip due-soon' };
+  if (diff<=3) return { text:diff+'天後', cls:'chip due-soon' };
+  return { text: fmtDate(due), cls:'chip due-ok' };
+}
+function fmtDate(d) { if(!d)return''; const p=d.split('-'); return p[1]+'/'+p[2]; }
+
+function isVisible(t) {
+  if (filter==='active') return !t.done;
+  if (filter==='done')   return t.done;
+  if (filter==='overdue') {
+    if (t.done||!t.due) return false;
+    const now=new Date(); now.setHours(0,0,0,0);
+    return new Date(t.due)<now;
+  }
   return true;
 }
-function allTasks(sec){return[...sec.tasks,...sec.groups.flatMap(g=>g.tasks)];}
-function getTaskList(sid,gid){const s=sections.find(s=>s.id===sid);if(!s)return null;if(gid!=null){const g=s.groups.find(g=>g.id===gid);return g?g.tasks:null;}return s.tasks;}
+function allTasks(sec) { return [...sec.tasks, ...sec.groups.flatMap(g=>g.tasks)]; }
+function getTaskList(sid,gid) {
+  const s=sections.find(s=>s.id===sid); if(!s)return null;
+  if(gid!=null){ const g=s.groups.find(g=>g.id===gid); return g?g.tasks:null; }
+  return s.tasks;
+}
 
-function render(){
+// ── Render ────────────────────────────────────────────────────────────────────
+function render() {
   purgeBin();
   const total=sections.flatMap(s=>allTasks(s)).length;
-  const done=sections.flatMap(s=>allTasks(s)).filter(t=>t.done).length;
-  document.getElementById('top-badge').textContent=done+' / '+total+' 完成';
-  document.getElementById('sections-wrap').innerHTML=sections.map(renderSection).join('');
+  const done =sections.flatMap(s=>allTasks(s)).filter(t=>t.done).length;
+  document.getElementById('top-badge').textContent = done+' / '+total+' 完成';
+  document.getElementById('sections-wrap').innerHTML = sections.map(renderSection).join('');
   renderBin();
   saveState();
 }
 
-function renderSection(sec){
-  const all=allTasks(sec);
-  const secDone=all.filter(t=>t.done).length;
-  if(!sec.open)return`<div class="section"><div class="sec-header" onclick="toggleSec(${sec.id})"><svg class="chevron" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg><span class="sec-title">${sec.title}</span><span class="sec-count">${secDone}/${all.length}</span></div></div>`;
-  return`<div class="section" id="sec-${sec.id}">
-    <div class="sec-header" onclick="toggleSec(${sec.id})">
-      <svg class="chevron open" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>
+function renderSection(sec) {
+  const all=allTasks(sec), secDone=all.filter(t=>t.done).length;
+  if (!sec.open) return `<div class="section"><div class="sec-hd" onclick="toggleSec(${sec.id})">
+    <svg class="cv" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>
+    <span class="sec-title">${sec.title}</span><span class="sec-count">${secDone}/${all.length}</span>
+  </div></div>`;
+  return `<div class="section" id="sec-${sec.id}">
+    <div class="sec-hd" onclick="toggleSec(${sec.id})">
+      <svg class="cv open" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>
       <span class="sec-title">${sec.title}</span><span class="sec-count">${secDone}/${all.length}</span>
     </div>
     <div class="sec-body">
       ${sec.groups.map(g=>renderGroup(g,sec.id)).join('')}
-      <div class="ungrouped">${sec.tasks.filter(isVisible).map(t=>renderTask(t,sec.id,null)).join('')}</div>
-      ${renderAddGroupBtn(sec.id)}
-      ${renderAddTaskRow(sec.id,null)}
+      <div>${sec.tasks.filter(isVisible).map(t=>renderTask(t,sec.id,null)).join('')}</div>
+      ${renderAddGrpBtn(sec.id)}
+      ${renderAddRow(sec.id,null)}
     </div>
   </div>`;
 }
 
-function renderGroup(g,sid){
-  const visible=g.tasks.filter(isVisible);
-  const gdone=g.tasks.filter(t=>t.done).length;
-  return`<div class="group" id="grp-${g.id}">
-    <div class="group-header" onclick="toggleGroup(${sid},${g.id})">
-      <svg class="chevron${g.open?' open':''}" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>
-      <span class="group-title">${g.title}</span>
-      <span class="group-count">${gdone}/${g.tasks.length}</span>
-      <button class="group-del" onclick="event.stopPropagation();trashGroup(${sid},${g.id})" title="刪除子標題">
+function renderGroup(g,sid) {
+  const visible=g.tasks.filter(isVisible), gdone=g.tasks.filter(t=>t.done).length;
+  return `<div class="group" id="grp-${g.id}">
+    <div class="grp-hd" onclick="toggleGroup(${sid},${g.id})">
+      <svg class="cv${g.open?' open':''}" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>
+      <span class="grp-title">${g.title}</span>
+      <span class="grp-count">${gdone}/${g.tasks.length}</span>
+      <button class="grp-del" onclick="event.stopPropagation();trashGroup(${sid},${g.id})" title="刪除子標題">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
       </button>
     </div>
-    ${g.open?`<div class="group-body">
+    ${g.open?`<div class="grp-body">
       ${visible.length?visible.map(t=>renderTask(t,sid,g.id)).join(''):'<div class="empty-hint" style="padding:8px 14px;font-size:12px">尚無任務</div>'}
-      ${renderAddTaskRow(sid,g.id)}
+      ${renderAddRow(sid,g.id)}
     </div>`:''}
   </div>`;
 }
 
-function renderAddGroupBtn(sid){
-  return`<div id="agb-${sid}">
-    <button class="add-group-btn" onclick="showAddGroup(${sid})">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>
-      新增子標題
+function renderAddGrpBtn(sid) {
+  return `<div id="agb-${sid}">
+    <button class="add-grp-btn" onclick="showAddGrp(${sid})">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg>新增子標題
     </button>
     <div id="agf-${sid}" style="display:none">
-      <div class="add-group-row">
+      <div class="add-grp-row">
         <input type="text" id="agi-${sid}" placeholder="子標題名稱..." maxlength="30"
-          onkeydown="if(event.key==='Enter')confirmAddGroup(${sid});if(event.key==='Escape')hideAddGroup(${sid})" />
-        <button onclick="confirmAddGroup(${sid})">確認</button>
-        <button onclick="hideAddGroup(${sid})">取消</button>
+          onkeydown="if(event.key==='Enter')confirmAddGrp(${sid});if(event.key==='Escape')hideAddGrp(${sid})" />
+        <button onclick="confirmAddGrp(${sid})">確認</button>
+        <button onclick="hideAddGrp(${sid})">取消</button>
       </div>
     </div>
   </div>`;
 }
 
-function renderAddTaskRow(sid,gid){
-  const key=gid!=null?`${sid}_${gid}`:`${sid}_ug`;
-  return`<div class="add-row">
+function renderAddRow(sid,gid) {
+  const key = gid!=null?`${sid}_${gid}`:`${sid}_ug`;
+  if (!pickerSel[key]) pickerSel[key] = new Set();
+  const sel = pickerSel[key];
+  const label = sel.size===0 ? '負責人' : [...sel].join('、');
+  return `<div class="add-row" id="row-${key}">
     <input type="text" id="inp-${key}" placeholder="新增任務..." maxlength="60"
       onkeydown="if(event.key==='Enter')addTask(${sid},${gid})" />
     <input type="date" id="date-${key}" min="${today()}" />
-    <select id="who-${key}">${PEOPLE.map(p=>`<option>${p}</option>`).join('')}</select>
+    <div class="who-wrap">
+      <button class="who-btn" id="wbtn-${key}" onclick="togglePicker('${key}',event)">${label}</button>
+      <div class="who-dropdown" id="wdrop-${key}" style="display:none">
+        ${people.map(p=>{
+          const on=sel.has(p);
+          return `<div class="who-option" onclick="togglePerson('${key}','${p}')">
+            <span class="who-check${on?' on':''}"></span>${p}
+          </div>`;
+        }).join('')}
+        <div class="who-sep"></div>
+        <div class="who-add-row">
+          <input type="text" id="newp-${key}" placeholder="新增成員..." maxlength="8"
+            onkeydown="if(event.key==='Enter')addPerson('${key}')" onclick="event.stopPropagation()" />
+          <button onclick="addPerson('${key}');event.stopPropagation()">＋</button>
+        </div>
+      </div>
+    </div>
     <button onclick="addTask(${sid},${gid})">新增</button>
   </div>`;
 }
 
-function renderTask(t,sid,gid){
-  const dl=dueLabel(t.due,t.done);
-  const ac=COLORS[t.assignee]||COLORS['所有人'];
-  const ga=gid!=null?gid:'null';
-  return`<div class="todo-item${t.done?' done':''}">
+function renderTask(t,sid,gid) {
+  const dl = dueLabel(t.due,t.done);
+  const ga = gid!=null?gid:'null';
+  const assignees = (t.assignees||[t.assignee]).filter(Boolean);
+  const chips = assignees.map(a=>{
+    const c=personColor(a);
+    return `<span class="chip" style="background:${c.bg};color:${c.col}">${a}</span>`;
+  }).join('');
+  const dueChip = dl?`<span class="meta-dot">·</span><span class="${dl.cls}">${dl.text}</span>`:'';
+  return `<div class="todo-item${t.done?' done':''}">
     <button class="chk${t.done?' yes':''}" onclick="toggleTask(${sid},${ga},${t.id})">
       ${t.done?`<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>`:''}
     </button>
     <div class="task-body">
       <div class="task-text">${t.text}</div>
-      <div class="task-meta">
-        <span class="assignee" style="background:${ac.bg};color:${ac.col}">${t.assignee}</span>
-        ${dl?`<span class="${dl.cls}">${dl.text}</span>`:''}
-      </div>
+      <div class="task-meta">${chips}${dueChip}</div>
     </div>
     <button class="trash-btn" onclick="trashTask(${sid},${ga},${t.id})" title="移至垃圾桶">
       <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
@@ -283,45 +366,101 @@ function renderTask(t,sid,gid){
   </div>`;
 }
 
-function renderBin(){
+function renderBin() {
   document.getElementById('bin-count').textContent='('+bin.length+')';
-  if(!binOpen){document.getElementById('bin-body').style.display='none';return;}
+  if (!binOpen) { document.getElementById('bin-body').style.display='none'; return; }
   document.getElementById('bin-body').style.display='block';
   const body=document.getElementById('bin-body');
-  if(!bin.length){body.innerHTML='<div class="empty-hint">垃圾桶是空的</div>';return;}
+  if (!bin.length) { body.innerHTML='<div class="empty-hint">垃圾桶是空的</div>'; return; }
   body.innerHTML=bin.map(b=>{
     const left=Math.ceil((new Date(b.deletedAt).getTime()+7*86400000-Date.now())/86400000);
     const where=b.groupTitle?b.secTitle+' › '+b.groupTitle:b.secTitle;
-    return`<div class="bin-item">
+    return `<div class="bin-item">
       <div style="flex:1;min-width:0">
-        <div class="bin-item-text">${b.isGroup?'[子標題] ':''}${b.label}</div>
-        <div style="font-size:11px;color:var(--text-tertiary);margin-top:2px">${where}${b.assignee?' · '+b.assignee:''}${b.due?' · '+fmtDate(b.due):''}</div>
+        <div class="bin-text">${b.isGroup?'[子標題] ':''}${b.label}</div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-top:2px">${where}${b.due?' · '+fmtDate(b.due):''}</div>
       </div>
-      <span class="bin-meta">${left} 天後刪除</span>
+      <span class="bin-meta">${left}天後刪除</span>
       <button class="restore-btn" onclick="restoreItem(${b.id})">還原</button>
-      <button class="perm-del" onclick="permDel(${b.id})" title="永久刪除">
+      <button class="perm-del" onclick="permDel(${b.id})">
         <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
       </button>
     </div>`;
   }).join('');
 }
 
-function purgeBin(){bin=bin.filter(b=>new Date(b.deletedAt).getTime()+7*86400000>Date.now());}
+function purgeBin() { bin=bin.filter(b=>new Date(b.deletedAt).getTime()+7*86400000>Date.now()); }
 
+// ── Picker ────────────────────────────────────────────────────────────────────
+function togglePicker(key,e) {
+  e.stopPropagation();
+  const drop=document.getElementById('wdrop-'+key);
+  if (!drop) return;
+  const isOpen=drop.style.display!=='none';
+  if (openPicker && openPicker!==key) {
+    const old=document.getElementById('wdrop-'+openPicker);
+    if(old)old.style.display='none';
+  }
+  drop.style.display=isOpen?'none':'block';
+  openPicker=isOpen?null:key;
+}
+function togglePerson(key,name) {
+  if (!pickerSel[key]) pickerSel[key]=new Set();
+  const sel=pickerSel[key];
+  if (sel.has(name)) sel.delete(name); else sel.add(name);
+  // update button label
+  const btn=document.getElementById('wbtn-'+key);
+  if(btn) btn.textContent=sel.size===0?'負責人':[...sel].join('、');
+  // update checkmarks
+  const drop=document.getElementById('wdrop-'+key);
+  if(drop) drop.querySelectorAll('.who-option').forEach(el=>{
+    const n=el.textContent.trim();
+    const chk=el.querySelector('.who-check');
+    if(chk) chk.className='who-check'+(sel.has(n)?' on':'');
+  });
+}
+function addPerson(key) {
+  const inp=document.getElementById('newp-'+key);
+  const name=inp?.value.trim();
+  if(!name||people.includes(name))return;
+  people.push(name);
+  inp.value='';
+  // add option to this picker without full re-render
+  const drop=document.getElementById('wdrop-'+key);
+  if(drop){
+    const sep=drop.querySelector('.who-sep');
+    const opt=document.createElement('div');
+    opt.className='who-option';
+    opt.innerHTML=`<span class="who-check"></span>${name}`;
+    opt.onclick=()=>togglePerson(key,name);
+    drop.insertBefore(opt,sep);
+  }
+  saveState();
+}
+document.addEventListener('click',()=>{
+  if(openPicker){
+    const d=document.getElementById('wdrop-'+openPicker);
+    if(d)d.style.display='none';
+    openPicker=null;
+  }
+});
+
+// ── Actions ───────────────────────────────────────────────────────────────────
 function toggleSec(id){const s=sections.find(s=>s.id===id);if(s)s.open=!s.open;render();}
 function toggleGroup(sid,gid){const s=sections.find(s=>s.id===sid);const g=s?.groups.find(g=>g.id===gid);if(g)g.open=!g.open;render();}
-function toggleBin(){binOpen=!binOpen;const ch=document.getElementById('bin-chevron');if(ch)ch.style.transform=binOpen?'rotate(90deg)':'';renderBin();}
+function toggleBin(){binOpen=!binOpen;const ch=document.getElementById('bin-cv');if(ch)ch.style.transform=binOpen?'rotate(90deg)':'';renderBin();}
 function toggleTask(sid,gid,tid){const list=getTaskList(sid,gid);const t=list?.find(t=>t.id===tid);if(t)t.done=!t.done;render();}
 
 function addTask(sid,gid){
   const key=gid!=null?`${sid}_${gid}`:`${sid}_ug`;
-  const inp=document.getElementById('inp-'+key);
-  const text=inp?.value.trim();
+  const text=document.getElementById('inp-'+key)?.value.trim();
   if(!text)return;
   const due=document.getElementById('date-'+key)?.value||'';
-  const who=document.getElementById('who-'+key)?.value||'所有人';
+  const sel=pickerSel[key]||new Set();
+  const assignees=sel.size>0?[...sel]:['所有人'];
   const list=getTaskList(sid,gid);
-  if(list)list.push({id:nid++,text,assignee:who,done:false,due});
+  if(list)list.push({id:nid++,text,assignees,done:false,due});
+  pickerSel[key]=new Set();
   render();
 }
 
@@ -332,20 +471,18 @@ function trashTask(sid,gid,tid){
   if(idx==null||idx<0)return;
   const[task]=list.splice(idx,1);
   const g=gid!=null?s.groups.find(g=>g.id===gid):null;
-  bin.push({id:nid++,isGroup:false,label:task.text,assignee:task.assignee,due:task.due,
+  bin.push({id:nid++,isGroup:false,label:task.text,due:task.due,
     secId:sid,secTitle:s.title,gid:gid??null,groupTitle:g?.title??null,task,deletedAt:new Date().toISOString()});
   render();
 }
-
 function trashGroup(sid,gid){
   const s=sections.find(s=>s.id===sid);if(!s)return;
   const idx=s.groups.findIndex(g=>g.id===gid);if(idx<0)return;
   const[g]=s.groups.splice(idx,1);
-  bin.push({id:nid++,isGroup:true,label:g.title,assignee:'',due:'',
+  bin.push({id:nid++,isGroup:true,label:g.title,due:'',
     secId:sid,secTitle:s.title,gid,groupTitle:g.title,group:g,deletedAt:new Date().toISOString()});
   render();
 }
-
 function restoreItem(bid){
   const idx=bin.findIndex(b=>b.id===bid);if(idx<0)return;
   const[b]=bin.splice(idx,1);
@@ -354,27 +491,25 @@ function restoreItem(bid){
   else{const list=getTaskList(s.id,b.gid);if(list)list.push(b.task);else s.tasks.push(b.task);}
   render();
 }
-
 function permDel(bid){bin=bin.filter(b=>b.id!==bid);renderBin();saveState();document.getElementById('bin-count').textContent='('+bin.length+')';}
 function setFilter(f,btn){filter=f;document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');render();}
 
-function showAddGroup(sid){
+function showAddGrp(sid){
   document.getElementById('agf-'+sid).style.display='block';
-  document.getElementById('agb-'+sid).querySelector('.add-group-btn').style.display='none';
+  document.getElementById('agb-'+sid).querySelector('.add-grp-btn').style.display='none';
   document.getElementById('agi-'+sid).focus();
 }
-function hideAddGroup(sid){
+function hideAddGrp(sid){
   document.getElementById('agf-'+sid).style.display='none';
-  document.getElementById('agb-'+sid).querySelector('.add-group-btn').style.display='';
+  document.getElementById('agb-'+sid).querySelector('.add-grp-btn').style.display='';
   document.getElementById('agi-'+sid).value='';
 }
-function confirmAddGroup(sid){
+function confirmAddGrp(sid){
   const v=document.getElementById('agi-'+sid)?.value.trim();if(!v)return;
   const s=sections.find(s=>s.id===sid);
   if(s)s.groups.push({id:nid++,title:v,open:true,tasks:[]});
   render();
 }
-
 function showNewSec(){document.getElementById('new-sec-form').style.display='flex';document.getElementById('new-sec-input').focus();}
 function cancelNewSec(){document.getElementById('new-sec-form').style.display='none';document.getElementById('new-sec-input').value='';}
 function confirmNewSec(){
