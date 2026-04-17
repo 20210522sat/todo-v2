@@ -59,7 +59,7 @@
     .who-wrap{position:relative;display:inline-block}
     .who-btn{font-size:12px;padding:4px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-secondary);cursor:pointer;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis}
     .who-btn:hover{background:var(--bg-secondary)}
-    .who-dropdown{position:absolute;top:calc(100% + 4px);left:0;z-index:200;background:var(--bg-primary);border:0.5px solid var(--border-s);border-radius:var(--r-md);padding:4px;min-width:130px;box-shadow:0 4px 12px rgba(0,0,0,0.12)}
+    .who-dropdown{position:absolute;bottom:calc(100% + 4px);left:0;z-index:200;background:var(--bg-primary);border:0.5px solid var(--border-s);border-radius:var(--r-md);padding:4px;min-width:130px;box-shadow:0 -4px 12px rgba(0,0,0,0.12)}
     .who-option{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--text-primary)}
     .who-option:hover{background:var(--bg-secondary)}
     .who-check{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--border-s);flex-shrink:0}
@@ -92,6 +92,10 @@
     .chip.due-soon{color:#854F0B;background:#FAEEDA}
     .chip.due-over{color:#791F1F;background:#FCEBEB}
     .meta-dot{font-size:10px;color:var(--text-tertiary);line-height:1}
+    .task-note{font-size:12px;color:var(--text-tertiary);margin-top:4px;white-space:pre-wrap;word-break:break-word;line-height:1.5}
+    .note-toggle{font-size:11px;color:var(--text-tertiary);background:transparent;border:none;cursor:pointer;padding:2px 0;text-align:left;margin-top:2px}
+    .note-toggle:hover{color:var(--text-secondary)}
+    .edit-form textarea{width:100%;font-size:13px;padding:5px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);outline:none;resize:vertical;min-height:56px;font-family:inherit;line-height:1.5}
     /* edit btn (pencil) */
     .edit-btn{width:26px;height:26px;border:none;background:transparent;cursor:pointer;color:var(--text-tertiary);display:flex;align-items:center;justify-content:center;border-radius:var(--r-md);flex-shrink:0;opacity:0;transition:opacity .15s}
     .edit-btn:hover{background:var(--bg-secondary);color:var(--text-secondary)}
@@ -185,8 +189,9 @@ const PCOLORS = [
 function personColor(name,ppl){const i=ppl.indexOf(name);return PCOLORS[i>=0?i%PCOLORS.length:2];}
 
 let state=null, filter='all', binOpen=false, pickerSel={}, openPicker=null;
-let editingId=null; // currently editing task id
+let editingId=null;
 let editPickerSel=new Set();
+let noteOpenIds=new Set();
 
 const today=()=>new Date().toISOString().slice(0,10);
 const addDays=(d,n)=>{const dt=new Date(d);dt.setDate(dt.getDate()+n);return dt.toISOString().slice(0,10);};
@@ -357,12 +362,10 @@ function renderTask(t,sid,gid){
   const chips=assignees.map(a=>{const c=personColor(a,ppl);return`<span class="chip" style="background:${c.bg};color:${c.col}">${a}</span>`;}).join('');
   const dueChip=dl?`<span class="meta-dot">·</span><span class="${dl.cls}">${dl.text}</span>`:'';
   const isEditing=editingId===t.id;
+  const note=t.note||'';
+  const noteShown=noteOpenIds.has(t.id);
 
-  // build edit-form who picker
   const editKey=`edit_${t.id}`;
-  if(isEditing && editPickerSel.size===0 && assignees.length){
-    // seed with current assignees
-  }
   const editLabel=isEditing?(editPickerSel.size>0?[...editPickerSel].join('、'):assignees.join('、')):'';
   const editWho=isEditing?`
     <div class="who-wrap">
@@ -380,6 +383,12 @@ function renderTask(t,sid,gid){
       </div>
     </div>`:'';
 
+  const noteDisplay=!isEditing?`
+    ${note?`<div class="task-note">${note.replace(/</g,'&lt;')}</div>`:''}
+    <button class="note-toggle" onclick="toggleNote(${t.id})">
+      ${note?(noteShown?'▾ 備註':'▸ 備註'):'＋ 備註'}
+    </button>`:'';
+
   return`<div class="todo-item${t.done?' done':''}${isEditing?' editing':''}" id="ti-${t.id}">
     <button class="chk${t.done?' yes':''}" onclick="toggleTask(${sid},${ga},${t.id})">
       ${t.done?`<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>`:''}
@@ -387,6 +396,7 @@ function renderTask(t,sid,gid){
     <div class="task-body">
       <div class="task-text">${t.text}</div>
       <div class="task-meta">${chips}${dueChip}</div>
+      ${noteDisplay}
       <div class="edit-form">
         <div class="edit-form-top">
           <input type="text" id="etxt-${t.id}" value="${t.text.replace(/"/g,'&quot;')}" maxlength="60"
@@ -394,6 +404,7 @@ function renderTask(t,sid,gid){
           <input type="date" id="edate-${t.id}" value="${t.due||''}" min="${today()}"/>
           ${editWho}
         </div>
+        <textarea id="enote-${t.id}" placeholder="備註（選填）...">${(t.note||'').replace(/</g,'&lt;')}</textarea>
         <div class="edit-form-actions">
           <button class="save" onclick="saveEdit(${sid},${ga},${t.id})">儲存</button>
           <button onclick="cancelEdit()">取消</button>
@@ -449,6 +460,11 @@ function renderBinSection(){
 }
 
 // ── Edit actions ─────────────────────────────────────────────────────────────
+window.toggleNote=tid=>{
+  if(noteOpenIds.has(tid))noteOpenIds.delete(tid);else noteOpenIds.add(tid);
+  render();
+};
+
 window.startEdit=(tid,assigneesStr)=>{
   editingId=tid;
   const current=assigneesStr?assigneesStr.split(',').filter(Boolean):[];
@@ -467,13 +483,14 @@ window.saveEdit=(sid,gid,tid)=>{
   const newText=document.getElementById('etxt-'+tid)?.value.trim();
   if(!newText)return;
   const newDue=document.getElementById('edate-'+tid)?.value||'';
-  const editKey=`edit_${tid}`;
+  const newNote=document.getElementById('enote-'+tid)?.value||'';
   const newAssignees=editPickerSel.size>0?[...editPickerSel]:null;
   const list=getTaskList(sid,gid);
   const t=list?.find(t=>t.id===tid);
   if(t){
     t.text=newText;
     t.due=newDue;
+    t.note=newNote;
     if(newAssignees)t.assignees=newAssignees;
   }
   editingId=null;editPickerSel=new Set();
