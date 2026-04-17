@@ -277,11 +277,17 @@ function renderSection(sec){
   if(!sec.open)return`<div class="section"><div class="sec-hd" onclick="toggleSec(${sec.id})">
     <svg class="cv" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>
     <span class="sec-title">${sec.title}</span><span class="sec-count">${secDone}/${all.length}</span>
+    <button class="grp-del" onclick="event.stopPropagation();trashSection(${sec.id})" title="刪除分類">
+      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
+    </button>
   </div></div>`;
   return`<div class="section" id="sec-${sec.id}">
     <div class="sec-hd" onclick="toggleSec(${sec.id})">
       <svg class="cv open" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>
       <span class="sec-title">${sec.title}</span><span class="sec-count">${secDone}/${all.length}</span>
+      <button class="grp-del" onclick="event.stopPropagation();trashSection(${sec.id})" title="刪除分類">
+        <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg>
+      </button>
     </div>
     <div class="sec-body">
       ${(sec.groups||[]).map(g=>renderGroup(g,sec.id)).join('')}
@@ -527,6 +533,17 @@ window.trashTask=(sid,gid,tid)=>{
     secId:sid,secTitle:s.title,gid:gid??null,groupTitle:g?.title??null,task,deletedAt:new Date().toISOString()});
   pushState();
 };
+window.trashSection=sid=>{
+  const idx=state.sections.findIndex(s=>s.id===sid);
+  if(idx<0)return;
+  const[sec]=state.sections.splice(idx,1);
+  const allT=allTasks(sec);
+  state.bin.push({id:state.nid++,isGroup:false,isSection:true,label:sec.title,due:'',
+    secId:sid,secTitle:sec.title,gid:null,groupTitle:null,
+    section:sec,deletedAt:new Date().toISOString()});
+  pushState();
+};
+
 window.trashGroup=(sid,gid)=>{
   const s=state.sections.find(s=>s.id===sid);if(!s)return;
   const idx=(s.groups||[]).findIndex(g=>g.id===gid);if(idx<0)return;
@@ -538,6 +555,7 @@ window.trashGroup=(sid,gid)=>{
 window.restoreItem=bid=>{
   const idx=(state.bin||[]).findIndex(b=>b.id===bid);if(idx<0)return;
   const[b]=state.bin.splice(idx,1);
+  if(b.isSection){state.sections.push(b.section);pushState();return;}
   const s=state.sections.find(s=>s.id===b.secId)||state.sections[0];if(!s)return;
   if(b.isGroup){s.groups=s.groups||[];s.groups.push(b.group);}
   else{const list=getTaskList(s.id,b.gid);if(list)list.push(b.task);else s.tasks.push(b.task);}
