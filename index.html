@@ -45,7 +45,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="app">
   <div class="hero">
     <h1>共享代辦清單</h1>
-    <div class="sub">保留原本 Firebase 資料；依時間排序、快到期提醒、負責人彩色標籤，並可切換莫蘭迪色系介面。</div>
     <div class="topline"><span class="dot loading" id="sync-dot"></span><span class="badge" id="top-badge">—</span></div>
     <div class="bubble" id="bunnyBubble">今天也要加油完成任務喔！</div>
     <img id="bunny-img" class="bunny" onclick="bunnyClick()" src="bunny_idle(1).png" alt="可愛兔兔插圖" />
@@ -115,8 +114,6 @@ const BUNNY_QUOTES=[
 const THEMES=[
 ['deepblue','#04253A','深海藍'],
 ['morandi_green','#4C837A','莫蘭迪綠'],
-['orange','#F29724','橘子橙'],
-['caramel','#B87200','焦糖金'],
 ['forest','#3A5A3F','森林綠'],
 ['mistblue','#638FA9','霧藍色'],
 ['gray','#565656','石墨灰'],
@@ -124,10 +121,8 @@ const THEMES=[
 ['oat','#E9C36C','燕麥黃'],
 ['mintblue','#A9DBDC','薄荷藍'],
 ['teal','#299E8F','青綠色'],
-['berry','#E63A46','莓果紅'],
 ['sage_green','#A6B08B','鼠尾草綠'],
 ['lightteal','#96D2BF','淡青綠'],
-['gold','#FBC009','亮黃金']
 ];
 const LEGACY_THEME_MAP={sage:'morandi_green',dusty:'cream',rose:'berry',latte:'oat',blue:'mistblue',olive:'sage_green',lavender:'lightteal',clay:'caramel',greenblue:'morandi_green',sage2:'sage_green'};
 const SHOP_ITEMS=[
