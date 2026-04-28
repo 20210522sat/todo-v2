@@ -36,8 +36,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .bunny{pointer-events:auto !important;user-select:none;-webkit-user-drag:none}
 .bunny-pop{animation:bunnyPop .28s ease !important}
 @keyframes bunnyPop{0%{transform:translateY(0) scale(1)}45%{transform:translateY(-12px) scale(1.06) rotate(-2deg)}100%{transform:translateY(0) scale(1) rotate(0)}}
-.game-panel{padding:12px;margin-bottom:14px}.game-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.coin-pill{font-weight:800;border:1px solid var(--line);background:linear-gradient(135deg,#fff7d6,var(--card));border-radius:999px;padding:8px 12px;color:#8a5b15}.game-action{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer}.game-action:hover{background:var(--card2)}.theme-picker-wrap{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;margin-top:10px}.theme-picker-label{font-size:12px;color:var(--muted);font-weight:700}.theme-picker{width:100%;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:13px;padding:10px 12px;font-size:14px;outline:none}.theme-picker:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}.active-item{font-size:12px;color:var(--muted);margin-top:8px}.shop-title{font-size:13px;font-weight:800;color:var(--muted);margin:12px 0 8px}.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}.shop-card{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:8px;cursor:pointer;text-align:center;transition:.16s}.shop-card:hover{transform:translateY(-2px);background:var(--card2)}.shop-card.active{box-shadow:0 0 0 2px var(--accent);border-color:var(--accent)}.shop-img{width:100%;height:64px;object-fit:contain;display:block;margin:auto}.shop-name{font-size:12px;font-weight:800;margin-top:5px}.shop-price{font-size:11px;color:var(--muted);margin-top:2px}.shop-card.locked .shop-price{color:#9b6b00}.shop-card.owned .shop-price{color:var(--ok)}
-@media(max-width:560px){.shop-grid{grid-template-columns:repeat(3,1fr)}.shop-img{height:58px}.game-top{gap:6px}.theme-picker-wrap{grid-template-columns:1fr}.theme-picker-label{width:100%}}
+.game-panel{padding:12px;margin-bottom:14px}.game-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.coin-pill{font-weight:800;border:1px solid var(--line);background:linear-gradient(135deg,#fff7d6,var(--card));border-radius:999px;padding:8px 12px;color:#8a5b15}.game-action{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 12px;font-size:13px;cursor:pointer}.game-action:hover{background:var(--card2)}.theme-picker-wrap{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:8px;margin-top:10px}.theme-picker-label{font-size:12px;color:var(--muted);font-weight:700}.theme-picker{width:100%;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:13px;padding:10px 12px;font-size:14px;outline:none}.theme-picker:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}.active-item{font-size:12px;color:var(--muted);margin-top:8px}.shop-overlay{position:fixed;inset:0;z-index:999;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(18px);display:none;overflow:auto;padding:14px}.shop-overlay.open{display:block}.shop-page{max-width:850px;margin:0 auto}.shop-header{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--card) 96%,transparent);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:12px;margin-bottom:12px}.shop-back{border:1px solid var(--line);background:var(--card2);color:var(--text);border-radius:999px;padding:9px 12px;font-size:14px;cursor:pointer}.shop-head-text{flex:1}.shop-head-title{font-weight:850;font-size:18px}.shop-head-sub{font-size:12px;color:var(--muted);margin-top:2px}.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(116px,1fr));gap:10px}.shop-card{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:10px;cursor:pointer;text-align:center;transition:.16s;box-shadow:0 10px 22px rgba(0,0,0,.06)}.shop-card:hover{transform:translateY(-2px);background:var(--card2)}.shop-card.active{box-shadow:0 0 0 2px var(--accent);border-color:var(--accent)}.shop-img{width:100%;height:82px;object-fit:contain;display:block;margin:auto}.shop-name{font-size:13px;font-weight:800;margin-top:6px}.shop-price{font-size:12px;color:var(--muted);margin-top:3px}.shop-card.locked .shop-price{color:#9b6b00}.shop-card.owned .shop-price{color:var(--ok)}
+@media(max-width:560px){.shop-overlay{padding:10px}.shop-grid{grid-template-columns:repeat(2,1fr)}.shop-img{height:78px}.game-top{gap:6px}.theme-picker-wrap{grid-template-columns:1fr}.theme-picker-label{width:100%}}
 
 </style>
 </head>
@@ -63,13 +63,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="game-top">
       <span class="coin-pill">🪙 <span id="coin-text">0</span> 金幣</span>
       <button class="game-action" onclick="feedGrass()">🌿 給草吃 +10</button>
+      <button class="game-action" onclick="openShop()">🛒 商店</button>
       <button class="game-action" onclick="useDefaultBunny()">換回原本兔子</button>
     </div>
     <div id="active-item" class="active-item">目前：原本兔子</div>
-    <div class="shop-title">兔兔商店｜點商品：未擁有會購買，已擁有會使用</div>
-    <div id="shop-grid" class="shop-grid"></div>
   </div>
   <div id="main-wrap"><div class="loading"><div class="spin"></div>連線中…</div></div>
+</div>
+<div id="shop-overlay" class="shop-overlay" aria-hidden="true">
+  <div class="shop-page">
+    <div class="shop-header">
+      <button class="shop-back" onclick="closeShop()">← 返回</button>
+      <div class="shop-head-text">
+        <div class="shop-head-title">兔兔商店</div>
+        <div class="shop-head-sub">點商品：未擁有會購買，已擁有會使用</div>
+      </div>
+      <span class="coin-pill">🪙 <span id="shop-coin-text">0</span></span>
+    </div>
+    <div id="shop-grid" class="shop-grid"></div>
+  </div>
+</div>
 </div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
@@ -175,13 +188,16 @@ function bunnyAnimate(){const b=document.getElementById('bunny-img');if(!b)retur
 window.bunnyTalk=(msg)=>{const el=document.getElementById('bunnyBubble');if(!el)return;let txt=msg;if(!txt){let idx=Math.floor(Math.random()*BUNNY_QUOTES.length);while(BUNNY_QUOTES.length>1&&idx===lastQuote){idx=Math.floor(Math.random()*BUNNY_QUOTES.length)}lastQuote=idx;txt=BUNNY_QUOTES[idx];}el.textContent=txt;el.style.transform='scale(1.08)';setTimeout(()=>el.style.transform='scale(1)',180);};
 window.bunnyClick=()=>{bunnyAnimate();bunnyTalk()};
 function addCoins(n,save=true){state.game.coins=Number(state.game.coins||0)+n;renderGame();if(save)pushState()}
-function renderGame(){if(!state?.game)return;const c=document.getElementById('coin-text');if(c)c.textContent=state.game.coins||0;const active=document.getElementById('active-item');const item=SHOP_ITEMS.find(i=>i.id===state.game.currentItem);if(active)active.textContent=item?`目前使用：${item.name}`:'目前：原本兔子';const grid=document.getElementById('shop-grid');if(!grid)return;grid.innerHTML=SHOP_ITEMS.map(item=>{const owned=state.game.ownedItems.includes(item.id);const active=state.game.currentItem===item.id;return `<div class="shop-card ${owned?'owned':'locked'} ${active?'active':''}" onclick="shopClick('${item.id}')"><img class="shop-img" src="${item.itemImg}" alt="${item.name}" onerror="this.style.display='none'"/><div class="shop-name">${item.name}</div><div class="shop-price">${owned?'已擁有｜點擊使用':item.price+' 金幣'}</div></div>`}).join('')}
+window.openShop=()=>{const o=document.getElementById('shop-overlay');if(o){o.classList.add('open');o.setAttribute('aria-hidden','false')}renderGame()};
+window.closeShop=()=>{const o=document.getElementById('shop-overlay');if(o){o.classList.remove('open');o.setAttribute('aria-hidden','true')}};
+function renderGame(){if(!state?.game)return;const c=document.getElementById('coin-text');if(c)c.textContent=state.game.coins||0;const sc=document.getElementById('shop-coin-text');if(sc)sc.textContent=state.game.coins||0;const active=document.getElementById('active-item');const item=SHOP_ITEMS.find(i=>i.id===state.game.currentItem);if(active)active.textContent=item?`目前使用：${item.name}`:'目前：原本兔子';const grid=document.getElementById('shop-grid');if(!grid)return;grid.innerHTML=SHOP_ITEMS.map(item=>{const owned=state.game.ownedItems.includes(item.id);const active=state.game.currentItem===item.id;return `<div class="shop-card ${owned?'owned':'locked'} ${active?'active':''}" onclick="shopClick('${item.id}')"><img class="shop-img" src="${item.itemImg}" alt="${item.name}" onerror="this.style.display='none'"/><div class="shop-name">${item.name}</div><div class="shop-price">${owned?'已擁有｜點擊使用':item.price+' 金幣'}</div></div>`}).join('')}
 window.feedGrass=()=>{addCoins(10,false);const b=document.getElementById('bunny-img');if(b)b.src='img/bunny/bunny_eat_grass.png';bunnyAnimate();bunnyTalk('本兔勉強吃一下。你得到 10 金幣。');setTimeout(()=>updateBunnyImage(false),1200);pushState()};
 window.useDefaultBunny=()=>{state.game.currentItem='default';bunnyTalk('終於知道本兔本來就很可愛了。');updateBunnyImage();renderGame();pushState()};
 window.shopClick=(id)=>{const item=SHOP_ITEMS.find(i=>i.id===id);if(!item)return;if(!state.game.ownedItems.includes(id)){if(state.game.coins<item.price){bunnyTalk('錢不夠。本兔不做白工，也不賒帳。');bunnyAnimate();return}state.game.coins-=item.price;state.game.ownedItems.push(id);bunnyTalk(`買好了：${item.name}。`)}else{bunnyTalk(`本兔使用：${item.name}。`)}state.game.currentItem=id;updateBunnyImage();renderGame();pushState()};
 function updateBunnyImage(animate=true){const b=document.getElementById('bunny-img');if(!b||!state?.game)return;const item=SHOP_ITEMS.find(i=>i.id===state.game.currentItem);b.src=item?item.bunnyImg:'bunny_idle(1).png';if(animate)bunnyAnimate()}
 
 setInterval(()=>bunnyTalk(),18000);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeShop()});
 document.addEventListener('click',()=>{if(openPicker){const d=document.getElementById('wdrop-'+openPicker);if(d)d.style.display='none';openPicker=null}});
 </script>
 </body>
