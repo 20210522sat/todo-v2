@@ -69,7 +69,8 @@
     .who-add-row input{flex:1;font-size:12px;padding:4px 6px;border:0.5px solid var(--border-s);border-radius:6px;background:var(--bg-primary);color:var(--text-primary);outline:none}
     .who-add-row button{font-size:12px;padding:4px 7px;border:0.5px solid var(--border-s);border-radius:6px;background:transparent;color:var(--text-primary);cursor:pointer}
     /* add group */
-    .add-grp-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border:none;background:transparent;color:var(--text-tertiary);font-size:12px;cursor:pointer;border-top:0.5px dashed var(--border-t);width:100%;text-align:left}
+    .tmpl-tags{display:flex;gap:5px;flex-wrap:wrap;padding:6px 12px 8px;border-top:1px dashed var(--line);background:color-mix(in srgb,var(--card) 78%,var(--card2))}.tmpl-tag{font-size:12px;padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--muted);cursor:pointer}.tmpl-tag:hover{background:var(--accent);color:white;border-color:var(--accent)}.tmpl-label{font-size:11px;color:var(--soft);align-self:center;white-space:nowrap}
+.add-grp-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border:none;background:transparent;color:var(--text-tertiary);font-size:12px;cursor:pointer;border-top:0.5px dashed var(--border-t);width:100%;text-align:left}
     .add-grp-btn:hover{color:var(--text-secondary);background:var(--bg-group)}
     .add-grp-row{display:flex;gap:6px;padding:6px 10px;border-top:0.5px dashed var(--border-t);background:var(--bg-group)}
     .add-grp-row input{flex:1;font-size:13px;padding:4px 8px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);outline:none}
@@ -144,30 +145,6 @@
     .loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1rem;gap:12px;color:var(--text-tertiary);font-size:14px}
     .spinner{width:24px;height:24px;border:2px solid var(--border-t);border-top-color:#1D9E75;border-radius:50%;animation:spin .8s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* template suite modal */
-    .top-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:-.35rem 0 1rem}
-    .suite-btn{font-size:13px;padding:5px 12px;border:0.5px solid var(--border-s);border-radius:99px;background:var(--bg-primary);color:var(--text-secondary);cursor:pointer}
-    .suite-btn:hover{background:var(--bg-secondary);color:var(--text-primary)}
-    .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.36);z-index:500;display:flex;align-items:flex-end;justify-content:center;padding:12px}
-    .modal-card{width:min(560px,100%);max-height:82vh;overflow:auto;background:var(--bg-primary);border:0.5px solid var(--border-s);border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.28)}
-    .modal-hd{display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:0.5px solid var(--border-t);background:var(--bg-secondary)}
-    .modal-title{font-size:16px;font-weight:650;flex:1}
-    .modal-close{border:0;background:transparent;color:var(--text-tertiary);font-size:22px;line-height:1;cursor:pointer;padding:2px 6px;border-radius:8px}
-    .modal-close:hover{background:var(--bg-tertiary);color:var(--text-primary)}
-    .modal-body{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
-    .form-line{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-    .form-line label{font-size:12px;color:var(--text-tertiary);width:100%}
-    .form-line select,.form-line input{flex:1;min-width:150px;font-size:14px;padding:7px 9px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:var(--bg-primary);color:var(--text-primary);outline:none}
-    .suite-preview{border:0.5px solid var(--border-t);border-radius:12px;overflow:hidden;background:var(--bg-group)}
-    .suite-preview-title{padding:8px 10px;font-size:13px;color:var(--text-secondary);border-bottom:0.5px solid var(--border-t)}
-    .suite-preview ol{padding:8px 12px 10px 30px;font-size:13px;color:var(--text-secondary);line-height:1.7;max-height:210px;overflow:auto}
-    .suite-actions{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px;border-top:0.5px solid var(--border-t)}
-    .suite-actions button{font-size:13px;padding:7px 13px;border:0.5px solid var(--border-s);border-radius:var(--r-md);background:transparent;color:var(--text-primary);cursor:pointer}
-    .suite-actions .save{background:#1D9E75;border-color:#1D9E75;color:white}
-    .suite-actions button:hover{background:var(--bg-secondary)}
-    .suite-actions .save:hover{background:#0F6E56}
-
   </style>
 </head>
 <body>
@@ -185,10 +162,6 @@
     <button class="fb" onclick="setFilter('done',this)">已完成</button>
     <button class="fb" onclick="setFilter('overdue',this)">已逾期</button>
   </div>
-  <div class="top-actions">
-    <button class="suite-btn" onclick="openSuiteModal()">＋ 套組</button>
-  </div>
-  <div id="suite-modal-wrap"></div>
   <div id="main-wrap">
     <div class="loading-screen"><div class="spinner"></div>連線中…</div>
   </div>
@@ -349,8 +322,6 @@ function renderGroup(g,sid){
 const TEMPLATES = {
   '講座': ['預約教室','約講師（時間、交通、飲食葷素及茶點喜好）','寫簽呈','院內建課系統','院外報名 Google 表單','全院信行事曆公告','講師感謝狀','講座線上簽到／退表單','多媒體看板單','廣播申請單','課程宣傳海報設計與輸出','講師停車優免','講師及與會貴賓名牌','麥克風套','講師簡歷簡報','請勤務教室課桌椅排列','茶水及餐點','借教室鑰匙'],
   '研究': ['確認諮詢目的','研究數據確認','投稿期刊建議','論文潤飾與優化','討論','結案（照片跟小記錄）'],
-  '活動行政': ['確認活動日期與地點','確認講者與講題','建立報名表單','寄送活動通知','準備簽到／簽退表','準備議程與簡報','茶水與餐點確認','活動前場地測試','活動照片與紀錄','活動後寄送感謝信'],
-  '公文簽呈': ['確認案由與辦理目的','整理依據與說明','撰寫擬辦內容','確認附件','送主管確認','上簽','追蹤核定結果','依核示辦理後續作業'],
 };
 
 function renderAddGrpBtn(sid){
@@ -505,83 +476,6 @@ function renderBinSection(){
     ${binOpen?`<div>${body}</div>`:''}
   </div>`;
 }
-
-
-function escHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-
-window.openSuiteModal=()=>{
-  if(!state)return;
-  const wrap=document.getElementById('suite-modal-wrap');
-  const sectionOptions=(state.sections||[]).map(s=>`<option value="${s.id}">${escHtml(s.title)}</option>`).join('');
-  const templateOptions=Object.keys(TEMPLATES).map(k=>`<option value="${escHtml(k)}">${escHtml(k)}</option>`).join('');
-  const peopleOptions=(state.people||[]).map(p=>`<option value="${escHtml(p)}">${escHtml(p)}</option>`).join('');
-  wrap.innerHTML=`<div class="modal-mask" onclick="closeSuiteModal(event)">
-    <div class="modal-card" onclick="event.stopPropagation()">
-      <div class="modal-hd">
-        <div class="modal-title">新增套組</div>
-        <button class="modal-close" onclick="closeSuiteModal()">×</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-line">
-          <label>套組類型</label>
-          <select id="suite-template" onchange="refreshSuitePreview()">${templateOptions}</select>
-        </div>
-        <div class="form-line">
-          <label>放到哪個分類</label>
-          <select id="suite-section">${sectionOptions}</select>
-        </div>
-        <div class="form-line">
-          <label>子標題名稱</label>
-          <input id="suite-title" placeholder="例如：5/5 基因體座談會" />
-        </div>
-        <div class="form-line">
-          <label>預設負責人</label>
-          <select id="suite-person"><option value="所有人">所有人</option>${peopleOptions}</select>
-        </div>
-        <div class="form-line">
-          <label>預設到期日（可留空）</label>
-          <input type="date" id="suite-due" min="${today()}" />
-        </div>
-        <div class="suite-preview">
-          <div class="suite-preview-title">會新增的任務</div>
-          <ol id="suite-preview-list"></ol>
-        </div>
-      </div>
-      <div class="suite-actions">
-        <button onclick="closeSuiteModal()">取消</button>
-        <button class="save" onclick="confirmSuiteModal()">建立套組</button>
-      </div>
-    </div>
-  </div>`;
-  refreshSuitePreview();
-};
-window.closeSuiteModal=(event)=>{
-  if(event&&event.target!==event.currentTarget)return;
-  const wrap=document.getElementById('suite-modal-wrap');
-  if(wrap)wrap.innerHTML='';
-};
-window.refreshSuitePreview=()=>{
-  const name=document.getElementById('suite-template')?.value||Object.keys(TEMPLATES)[0];
-  const list=document.getElementById('suite-preview-list');
-  const title=document.getElementById('suite-title');
-  if(title&&!title.value)title.value=name;
-  if(list)list.innerHTML=(TEMPLATES[name]||[]).map(t=>`<li>${escHtml(t)}</li>`).join('');
-};
-window.confirmSuiteModal=()=>{
-  const tmplName=document.getElementById('suite-template')?.value;
-  const sid=Number(document.getElementById('suite-section')?.value);
-  const title=(document.getElementById('suite-title')?.value||tmplName||'套組').trim();
-  const person=document.getElementById('suite-person')?.value||'所有人';
-  const due=document.getElementById('suite-due')?.value||'';
-  const tmplTasks=TEMPLATES[tmplName];
-  const s=state.sections.find(s=>s.id===sid);
-  if(!s||!tmplTasks)return;
-  s.groups=s.groups||[];
-  const tasks=tmplTasks.map(text=>({id:state.nid++,text,assignees:[person],done:false,due,note:''}));
-  s.groups.push({id:state.nid++,title,open:true,tasks});
-  closeSuiteModal();
-  pushState();
-};
 
 // ── Edit actions ─────────────────────────────────────────────────────────────
 window.toggleNote=tid=>{
