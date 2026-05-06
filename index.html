@@ -122,18 +122,62 @@ const SHOP_ITEMS=[
 {id:'headphone',name:'耳機',price:55,itemImg:'img/items/headphone.png',bunnyImg:'img/bunny/bunny_headphone.png'},
 {id:'phone',name:'手機',price:65,itemImg:'img/items/phone.png',bunnyImg:'img/bunny/bunny_phone.png'}
 ];
-// 講座套組：三個分類，各有 phase 標記
+// 講座套組：單一子標題，任務帶 phase 屬性顯示顏色
 const TEMPLATES={
   '講座':{
     groups:[
-      {phase:'pre',title:'課前事項',tasks:['預約教室','邀約講師','議程表（簽呈用）','講師資料表','填教育訓練課程表','學會積分【務必一個月前】','調查葷素餐點、飲料','寫簽呈','聯絡海報、議程表及名牌製作','多媒體看板','廣播申請單','院內報名系統','院外表單','全院信','簽到退線上表單','排桌椅','講師介紹簡報','印及傳授權同意書','印獎狀','印牛皮紙袋','印印領清冊','借讀卡機、投影筆x2、簽名夾板及立牌架x2','訂餐','借鑰匙','填報報']},
-      {phase:'day',title:'當天',tasks:['帶講師資料表、授權同意書、印領清冊、獎狀及錢','帶海報、議程表及名牌','帶讀卡機、投影筆x2、簽名夾板及立牌架x2、電池','帶簽到退表單及積分簽名單','帶水、衛生紙、垃圾袋及送禮提袋','帶筆電x2','拿餐點茶水','公用區上傳簡報','拍照']},
-      {phase:'post',title:'課後',tasks:['上傳各學會或院內時數表格','整理照片','寫會議記錄','寫講師回饋單']}
+      {phase:null,title:'講座',tasks:[
+        {text:'預約教室',phase:'pre'},
+        {text:'邀約講師',phase:'pre'},
+        {text:'議程表（簽呈用）',phase:'pre'},
+        {text:'講師資料表',phase:'pre'},
+        {text:'填教育訓練課程表',phase:'pre'},
+        {text:'學會積分【務必一個月前】',phase:'pre'},
+        {text:'調查葷素餐點、飲料',phase:'pre'},
+        {text:'寫簽呈',phase:'pre'},
+        {text:'聯絡海報、議程表及名牌製作',phase:'pre'},
+        {text:'多媒體看板',phase:'pre'},
+        {text:'廣播申請單',phase:'pre'},
+        {text:'院內報名系統',phase:'pre'},
+        {text:'院外表單',phase:'pre'},
+        {text:'全院信',phase:'pre'},
+        {text:'簽到退線上表單',phase:'pre'},
+        {text:'排桌椅',phase:'pre'},
+        {text:'講師介紹簡報',phase:'pre'},
+        {text:'印及傳授權同意書',phase:'pre'},
+        {text:'印獎狀',phase:'pre'},
+        {text:'印牛皮紙袋',phase:'pre'},
+        {text:'印印領清冊',phase:'pre'},
+        {text:'借讀卡機、投影筆x2、簽名夾板及立牌架x2',phase:'pre'},
+        {text:'訂餐',phase:'pre'},
+        {text:'借鑰匙',phase:'pre'},
+        {text:'填報報',phase:'pre'},
+        {text:'帶講師資料表、授權同意書、印領清冊、獎狀及錢',phase:'day'},
+        {text:'帶海報、議程表及名牌',phase:'day'},
+        {text:'帶讀卡機、投影筆x2、簽名夾板及立牌架x2、電池',phase:'day'},
+        {text:'帶簽到退表單及積分簽名單',phase:'day'},
+        {text:'帶水、衛生紙、垃圾袋及送禮提袋',phase:'day'},
+        {text:'帶筆電x2',phase:'day'},
+        {text:'拿餐點茶水',phase:'day'},
+        {text:'公用區上傳簡報',phase:'day'},
+        {text:'拍照',phase:'day'},
+        {text:'上傳各學會或院內時數表格',phase:'post'},
+        {text:'整理照片',phase:'post'},
+        {text:'寫會議記錄',phase:'post'},
+        {text:'寫講師回饋單',phase:'post'},
+      ]}
     ]
   },
   '研究':{
     groups:[
-      {phase:null,title:'研究',tasks:['確認諮詢目的','研究數據確認','投稿期刊建議','論文潤飾與優化','討論','結案（照片跟小記錄）']}
+      {phase:null,title:'研究',tasks:[
+        {text:'確認諮詢目的',phase:null},
+        {text:'研究數據確認',phase:null},
+        {text:'投稿期刊建議',phase:null},
+        {text:'論文潤飾與優化',phase:null},
+        {text:'討論',phase:null},
+        {text:'結案（照片跟小記錄）',phase:null},
+      ]}
     ]
   }
 };
@@ -142,7 +186,7 @@ let state=null,filter='all',searchText='',binOpen=false,pickerSel={},openPicker=
 const today=()=>new Date().toISOString().slice(0,10);const addDays=(d,n)=>{const dt=new Date(d);dt.setDate(dt.getDate()+n);return dt.toISOString().slice(0,10)};const esc=s=>String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));const dateOnly=dt=>dt?String(dt).slice(0,10):'';
 function defaultState(){return{nid:20,people:['欣儀','咨妗','所有人'],personColors:{},ui:{theme:'gray'},sections:[{id:1,title:'工作任務',open:true,groups:[],tasks:[]},{id:7,title:'生活雜事',open:true,groups:[],tasks:[]}],bin:[]}}
 function normalize(){state.bin=state.bin||[];state.people=state.people||['欣儀','咨妗','所有人'];state.personColors=state.personColors||{};state.ui=state.ui||{theme:'gray'};state.ui.theme='gray';state.game=state.game||{};state.game.coins=Number(state.game.coins||0);state.game.ownedItems=Array.isArray(state.game.ownedItems)?state.game.ownedItems:[];state.game.currentItem=state.game.currentItem||'default';state.people.forEach((p,i)=>{if(!state.personColors[p])state.personColors[p]=NAME_COLORS[i%NAME_COLORS.length]});state.nid=state.nid||Date.now();state.sections=(state.sections||[]).map(s=>({...s,open:s.open!==false,tasks:(s.tasks||[]).map(normTask),groups:(s.groups||[]).map(g=>({...g,open:g.open!==false,tasks:(g.tasks||[]).map(normTask)}))}));}
-function normTask(t){const ass=t.assignees||(t.assignee?[t.assignee]:['所有人']);return{...t,assignees:ass,done:!!t.done,dueAt:t.dueAt||dateToDueAt(t.due),note:t.note||''}}function dateToDueAt(d){if(!d)return'';return String(d).length===10?`${d}T09:00`:String(d).slice(0,16)}
+function normTask(t){const ass=t.assignees||(t.assignee?[t.assignee]:['所有人']);return{...t,assignees:ass,done:!!t.done,dueAt:t.dueAt||dateToDueAt(t.due),note:t.note||'',phase:t.phase||null}}function dateToDueAt(d){if(!d)return'';return String(d).length===10?`${d}T09:00`:String(d).slice(0,16)}
 function applyTheme(){document.documentElement.style.setProperty('--accent','#565656')}
 window.setTheme=()=>{};
 function dot(s){const d=document.getElementById('sync-dot');if(d)d.className='dot '+s}function pushState(){dot('loading');purgeBin();set(ROOT,state).then(()=>dot('ok')).catch(()=>dot('err'))}onValue(ROOT,snap=>{const val=snap.val();if(!val){state=defaultState();normalize();pushState()}else{state=val;normalize()}applyTheme();dot('ok');render()},()=>dot('err'));
@@ -154,7 +198,7 @@ function personChip(n){const c=state.personColors?.[n]||'#bbb';return`<span clas
 function render(){if(!state)return;const tasks=state.sections.flatMap(s=>allTasks(s));const done=tasks.filter(t=>t.done).length;const warn=tasks.filter(t=>['overdue','urgent','soon'].includes(urgency(t).key)).length;document.getElementById('top-badge').textContent=`${done}/${tasks.length} 完成 · ${warn} 提醒`;document.getElementById('main-wrap').innerHTML=state.sections.map(renderSection).join('')+renderBinSection();renderGame();updateBunnyImage(false)}
 function renderSection(sec){const all=allTasks(sec),d=all.filter(t=>t.done).length;return`<div class="section"><div class="sec-hd" onclick="toggleSec(${sec.id})"><svg class="cv ${sec.open?'open':''}" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg><span class="sec-title">${esc(sec.title)}</span><span class="count">${d}/${all.length}</span><button class="icon del" onclick="event.stopPropagation();trashSection(${sec.id})">×</button></div>${sec.open?`<div>${(sec.groups||[]).map(g=>renderGroup(g,sec.id)).join('')}<div>${sortTasks(sec.tasks||[]).filter(isVisible).map(t=>renderTask(t,sec.id,null)).join('')}</div>${renderAddGrpBtn(sec.id)}${renderAddRow(sec.id,null)}</div>`:''}</div>`}
 function renderGroup(g,sid){const visible=sortTasks(g.tasks||[]).filter(isVisible),d=(g.tasks||[]).filter(t=>t.done).length,isEdit=editingGroupId===g.id;const phase=g.phase||null;const PHASE_LABEL={pre:'課前',day:'當天',post:'課後'};const phaseTag=phase?`<span class="grp-phase-tag grp-phase-${phase}">${PHASE_LABEL[phase]||''}</span>`:'';return`<div class="group"><div class="grp-hd" onclick="${isEdit?'':'toggleGroup('+sid+','+g.id+')'}"><svg class="cv ${g.open?'open':''}" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><polyline points="5,3 9,7 5,11"/></svg>${isEdit?`<input type="text" id="grp-edit-${g.id}" class="grp-edit-input" value="${esc(g.title)}" maxlength="40" onclick="event.stopPropagation()" onkeydown="if(event.key===\'Enter\')saveGroupTitle(${sid},${g.id});if(event.key===\'Escape\')cancelGroupTitle()"/>`:`<span class="grp-title">${esc(g.title)}</span>${phaseTag}`}<span class="count">${d}/${(g.tasks||[]).length}</span>${isEdit?`<button class="icon" onclick="event.stopPropagation();saveGroupTitle(${sid},${g.id})">✓</button><button class="icon del" onclick="event.stopPropagation();cancelGroupTitle()">×</button>`:`<button class="icon" onclick="event.stopPropagation();startGroupTitle(${g.id})">✎</button><button class="icon del" onclick="event.stopPropagation();trashGroup(${sid},${g.id})">×</button>`}</div>${g.open?`<div>${visible.length?visible.map(t=>renderTask(t,sid,g.id)).join(''):'<div class="empty">尚無任務</div>'}${renderAddRow(sid,g.id)}</div>`:''}</div>`}
-function renderTask(t,sid,gid){const u=urgency(t),ga=gid!=null?gid:'null',edit=editingId===t.id;const cls=t.done?'done':u.key==='overdue'?'overdue':['urgent','soon'].includes(u.key)?'urgent':u.key==='notime'?'notime':'';const chip=u.key==='overdue'?'overdue':u.key==='urgent'?'urgent':u.key==='soon'?'soon':u.key==='notime'?'none':u.key==='done'?'done':'time';return`<div id="todo-${t.id}" class="todo ${cls} ${edit?'editing':''}"><button class="chk ${t.done?'yes':''}" onclick="toggleTask(${sid},${ga},${t.id})">${t.done?'<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>':''}</button><div class="normal"><div class="task-text">${esc(t.text)}</div><div class="meta">${(t.assignees||['所有人']).map(personChip).join('')}<span class="chip ${chip}">${u.label}</span></div>${t.note?`<div class="note">${esc(t.note)}</div>`:''}</div><div class="actions"><button class="icon" onclick="startEdit(${sid},${ga},${t.id})">✎</button><button class="icon del" onclick="trashTask(${sid},${ga},${t.id})">×</button></div>${edit?renderEditForm(t):''}</div>`}
+function renderTask(t,sid,gid){const u=urgency(t),ga=gid!=null?gid:'null',edit=editingId===t.id;const cls=t.done?'done':u.key==='overdue'?'overdue':['urgent','soon'].includes(u.key)?'urgent':u.key==='notime'?'notime':'';const chip=u.key==='overdue'?'overdue':u.key==='urgent'?'urgent':u.key==='soon'?'soon':u.key==='notime'?'none':u.key==='done'?'done':'time';const PHASE_MAP={pre:{label:'課前',cls:'grp-phase-pre'},day:{label:'當天',cls:'grp-phase-day'},post:{label:'課後',cls:'grp-phase-post'}};const pDef=t.phase?PHASE_MAP[t.phase]:null;const phaseChip=pDef?`<span class="grp-phase-tag ${pDef.cls}">${pDef.label}</span>`:'';return`<div id="todo-${t.id}" class="todo ${cls} ${edit?'editing':''}"><button class="chk ${t.done?'yes':''}" onclick="toggleTask(${sid},${ga},${t.id})">${t.done?'<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>':''}</button><div class="normal"><div class="task-text">${esc(t.text)}</div><div class="meta">${phaseChip}${(t.assignees||['所有人']).map(personChip).join('')}<span class="chip ${chip}">${u.label}</span></div>${t.note?`<div class="note">${esc(t.note)}</div>`:''}</div><div class="actions"><button class="icon" onclick="startEdit(${sid},${ga},${t.id})">✎</button><button class="icon del" onclick="trashTask(${sid},${ga},${t.id})">×</button></div>${edit?renderEditForm(t):''}</div>`}
 function renderEditForm(t){const key=`edit_${t.id}`,label=editPickerSel.size?[...editPickerSel].join('、'):'負責人';return`<div class="edit-form"><input type="text" id="etxt-${t.id}" value="${esc(t.text)}" maxlength="80"/><input type="datetime-local" id="edue-${t.id}" value="${t.dueAt||''}"/>${renderWho(key,label)}<textarea id="enote-${t.id}" placeholder="備註（選填）">${esc(t.note||'')}</textarea><button class="btn save" onclick="saveEdit(${t.id})">儲存</button><button class="btn" onclick="cancelEdit()">取消</button></div>`}
 function renderWho(key,label){const sel=key.startsWith('edit_')?editPickerSel:(pickerSel[key]=pickerSel[key]||new Set());return`<div class="who-wrap"><button class="who-btn" onclick="togglePicker('${key}',event)">${esc(label)}</button><div class="who-dropdown" id="wdrop-${key}" style="display:none">${(state.people||[]).map(p=>`<div class="who-option" onclick="togglePerson('${key}','${esc(p)}')"><span class="who-check ${sel.has(p)?'on':''}"></span><span style="color:${state.personColors[p]}">●</span>${esc(p)}</div>`).join('')}<div class="who-add"><input id="newp-${key}" placeholder="新增成員" onclick="event.stopPropagation()"/><button class="btn" onclick="addPerson('${key}');event.stopPropagation()">＋</button></div></div></div>`}
 function renderAddRow(sid,gid){const key=gid!=null?`${sid}_${gid}`:`${sid}_ug`;if(!pickerSel[key])pickerSel[key]=new Set();const label=pickerSel[key].size?[...pickerSel[key]].join('、'):'負責人';return`<div class="add-row"><input type="text" id="inp-${key}" placeholder="新增任務..." maxlength="80" onkeydown="if(event.key==='Enter')addTask(${sid},${gid})"/><input type="datetime-local" id="date-${key}"/>${renderWho(key,label)}<button class="btn" onclick="addTask(${sid},${gid})">新增</button></div>`}
@@ -166,7 +210,7 @@ window.startEdit=(sid,gid,tid)=>{const t=getTaskList(sid,gid)?.find(t=>t.id===ti
 window.trashTask=(sid,gid,tid)=>{const s=state.sections.find(s=>s.id===sid),list=getTaskList(sid,gid),idx=list?.findIndex(t=>t.id===tid);if(idx==null||idx<0)return;const[task]=list.splice(idx,1),g=gid!=null?s.groups.find(g=>g.id===gid):null;state.bin.push({id:state.nid++,label:task.text,task,secId:sid,secTitle:s.title,gid:gid??null,groupTitle:g?.title??null,deletedAt:new Date().toISOString()});pushState()};window.trashGroup=(sid,gid)=>{const s=state.sections.find(s=>s.id===sid),idx=s?.groups?.findIndex(g=>g.id===gid);if(idx==null||idx<0)return;const[group]=s.groups.splice(idx,1);state.bin.push({id:state.nid++,label:group.title,isGroup:true,group,secId:sid,secTitle:s.title,deletedAt:new Date().toISOString()});pushState()};window.trashSection=sid=>{const idx=state.sections.findIndex(s=>s.id===sid);if(idx<0)return;const[section]=state.sections.splice(idx,1);state.bin.push({id:state.nid++,label:section.title,isSection:true,section,deletedAt:new Date().toISOString()});pushState()};
 window.restoreItem=bid=>{const idx=state.bin.findIndex(b=>b.id===bid);if(idx<0)return;const[b]=state.bin.splice(idx,1);if(b.isSection)state.sections.push(b.section);else{const s=state.sections.find(s=>s.id===b.secId)||state.sections[0];if(b.isGroup){s.groups=s.groups||[];s.groups.push(b.group)}else{const list=getTaskList(s.id,b.gid);(list||s.tasks).push(b.task)}}pushState()};window.permDel=bid=>{state.bin=state.bin.filter(b=>b.id!==bid);pushState()};
 window.showAddGrp=sid=>{const el=document.getElementById('agf-'+sid);if(el){el.style.display='block';document.getElementById('agi-'+sid)?.focus()}};window.hideAddGrp=sid=>{const el=document.getElementById('agf-'+sid);if(el){el.style.display='none';const inp=document.getElementById('agi-'+sid);if(inp)inp.value=''}};window.confirmAddGrp=sid=>{const v=document.getElementById('agi-'+sid)?.value.trim();if(!v)return;const s=state.sections.find(s=>s.id===sid);s.groups=s.groups||[];s.groups.push({id:state.nid++,title:v,open:true,tasks:[]});window.hideAddGrp(sid);pushState()};
-window.applyTemplate=(sid,name)=>{const tmpl=TEMPLATES[name];if(!tmpl)return;const s=state.sections.find(s=>s.id===sid);if(!s)return;s.groups=s.groups||[];const input=document.getElementById('agi-'+sid);const customTitle=input?.value.trim();tmpl.groups.forEach((grpDef,i)=>{const grpTitle=tmpl.groups.length===1?(customTitle||grpDef.title):(i===0&&customTitle?customTitle+' - '+grpDef.title:grpDef.title);s.groups.push({id:state.nid++,title:grpTitle,phase:grpDef.phase||null,open:true,tasks:grpDef.tasks.map(text=>({id:state.nid++,text,assignees:['所有人'],done:false,dueAt:'',due:'',note:''}))})});window.hideAddGrp(sid);bunnyTalk(`套組「${name}」建好了，快去分配任務。`);pushState()};
+window.applyTemplate=(sid,name)=>{const tmpl=TEMPLATES[name];if(!tmpl)return;const s=state.sections.find(s=>s.id===sid);if(!s)return;s.groups=s.groups||[];const input=document.getElementById('agi-'+sid);const customTitle=input?.value.trim();tmpl.groups.forEach((grpDef)=>{const grpTitle=customTitle||grpDef.title;s.groups.push({id:state.nid++,title:grpTitle,phase:grpDef.phase||null,open:true,tasks:grpDef.tasks.map(td=>{const isObj=typeof td==='object';return{id:state.nid++,text:isObj?td.text:td,phase:isObj?td.phase||null:null,assignees:['所有人'],done:false,dueAt:'',due:'',note:''}})})});window.hideAddGrp(sid);bunnyTalk(`套組「${name}」建好了，快去分配任務。`);pushState()};
 window.startGroupTitle=gid=>{editingGroupId=gid;render();setTimeout(()=>document.getElementById('grp-edit-'+gid)?.focus(),0)};window.cancelGroupTitle=()=>{editingGroupId=null;render()};window.saveGroupTitle=(sid,gid)=>{const g=state.sections.find(s=>s.id===sid)?.groups?.find(g=>g.id===gid);const v=document.getElementById('grp-edit-'+gid)?.value.trim();if(g&&v)g.title=v;editingGroupId=null;pushState()};
 window.showNewSec=()=>{document.getElementById('new-sec-form').style.display='flex';document.getElementById('new-sec-input').focus()};window.cancelNewSec=()=>{document.getElementById('new-sec-form').style.display='none';document.getElementById('new-sec-input').value=''};window.confirmNewSec=()=>{const v=document.getElementById('new-sec-input').value.trim();if(!v)return;state.sections.push({id:state.nid++,title:v,open:true,groups:[],tasks:[]});window.cancelNewSec();pushState()};
 window.togglePicker=(key,e)=>{e.stopPropagation();const d=document.getElementById('wdrop-'+key);if(!d)return;if(openPicker&&openPicker!==key){const o=document.getElementById('wdrop-'+openPicker);if(o)o.style.display='none'}const op=d.style.display!=='none';d.style.display=op?'none':'block';openPicker=op?null:key};window.togglePerson=(key,name)=>{const sel=key.startsWith('edit_')?editPickerSel:(pickerSel[key]=pickerSel[key]||new Set());if(sel.has(name))sel.delete(name);else sel.add(name);render();setTimeout(()=>{const d=document.getElementById('wdrop-'+key);if(d)d.style.display='block';openPicker=key},0)};window.addPerson=key=>{const inp=document.getElementById('newp-'+key),name=inp?.value.trim();if(!name)return;if(!state.people.includes(name)){state.people.push(name);state.personColors[name]=NAME_COLORS[state.people.length%NAME_COLORS.length]}const sel=key.startsWith('edit_')?editPickerSel:(pickerSel[key]=pickerSel[key]||new Set());sel.add(name);pushState()};let lastQuote=-1;
